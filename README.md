@@ -1,1 +1,1 @@
-# TailWind CSS Configuration
+# Avali-e WEB
