@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Button } from '../../components/button';
 import { ForgotPasswordModal } from './login-components/forgot-password-modal';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
+	const navigate = useNavigate();
 	const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
 		useState(false);
 
@@ -11,6 +13,10 @@ export function LoginPage() {
 			? setIsForgotPasswordModalOpen(false)
 			: setIsForgotPasswordModalOpen(true);
 	};
+
+	function UserLogIn(path: string) {
+		navigate(path);
+	}
 
 	return (
 		<div className="bg-zinc-900 h-screen flex items-center justify-center">
@@ -42,7 +48,14 @@ export function LoginPage() {
 							/>
 						</div>
 					</div>
-					<Button type="submit" variant="primary" size="full">
+					<Button
+						type="submit"
+						variant="primary"
+						size="full"
+						onClick={() => {
+							UserLogIn('/dashboard');
+						}}
+					>
 						Entrar
 					</Button>
 
