@@ -1,6 +1,17 @@
+import { useState } from 'react';
 import { Button } from '../../components/button';
+import { ForgotPasswordModal } from './login-components/forgot-password-modal';
 
 export function LoginPage() {
+	const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
+		useState(false);
+
+	const handleForgotPasswordModal = () => {
+		isForgotPasswordModalOpen
+			? setIsForgotPasswordModalOpen(false)
+			: setIsForgotPasswordModalOpen(true);
+	};
+
 	return (
 		<div className="bg-zinc-900 h-screen flex items-center justify-center">
 			<div className="bg-zinc-800 w-[640px] h-auto rounded-xl py-7 px-6 shadow-shape flex flex-col justify-center gap-10">
@@ -36,15 +47,22 @@ export function LoginPage() {
 					</Button>
 
 					<div className="w-full flex justify-center">
-						<a
-							href="/forgot-password"
+						<button
+							type="button"
 							className="text-sm text-zinc-300 underline hover:text-zinc-200"
+							onClick={handleForgotPasswordModal}
 						>
 							Esqueci minha senha
-						</a>
+						</button>
 					</div>
 				</form>
 			</div>
+
+			{isForgotPasswordModalOpen && (
+				<ForgotPasswordModal
+					handleForgotPasswordModal={handleForgotPasswordModal}
+				/>
+			)}
 		</div>
 	);
 }
