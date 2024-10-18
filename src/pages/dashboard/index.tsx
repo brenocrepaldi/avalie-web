@@ -4,12 +4,22 @@ import { MenuBar } from './dashboard-components/menu-bar/index';
 import { Button } from '../../components/button';
 import { useNavigate } from 'react-router-dom';
 import ReactECharts from 'echarts-for-react';
-import { ThumbsUp, ThumbsDown, Meh } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, Meh, Calendar } from 'lucide-react';
+import { DatePickerModal } from './dashboard-components/date-picker-modal';
+import { DateRange } from 'react-day-picker';
+import { format, subDays } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import 'react-day-picker/dist/style.css';
 
 export function DashboardPage() {
 	const navigate = useNavigate();
 	const [isMenubarOpen, setIsMenubarOpen] = useState(false);
+	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 	const [contentVisible, setContentVisible] = useState(false);
+	const [dateRange, setDateRange] = useState<DateRange | undefined>({
+		from: subDays(new Date(), 30),
+		to: new Date(),
+	});
 
 	// Função para alternar o menu lateral
 	const toggleMenubar = () => {
@@ -162,6 +172,19 @@ export function DashboardPage() {
 		},
 	];
 
+	const handleDatePicker = () => {
+		isDatePickerOpen ? setIsDatePickerOpen(false) : setIsDatePickerOpen(true);
+	};
+
+	const displayedDate =
+		dateRange && dateRange.from && dateRange.to
+			? `${format(dateRange.from, 'dd/MM/yyyy', { locale: ptBR })} até ${format(
+					dateRange.to,
+					'dd/MM/yyyy',
+					{ locale: ptBR }
+				)}`
+			: null;
+
 	return (
 		<div className="bg-zinc-900 h-screen flex">
 			<MenuBar toggleMenubar={toggleMenubar} isMenubarOpen={isMenubarOpen} />
@@ -173,11 +196,28 @@ export function DashboardPage() {
 			>
 				<div className="bg-zinc-800 p-4 rounded-lg shadow-shape flex justify-between items-center">
 					<h1 className="text-2xl font-semibold text-zinc-200">Dashboard</h1>
+					<button
+						onClick={handleDatePicker}
+						className="flex items-center gap-2 text-left"
+					>
+						<Calendar className="size-5 text-zinc-400" />
+						<span className="text-lg text-zinc-400">
+							{displayedDate || 'Selecione o período'}
+						</span>
+					</button>
 					<Button type="button" variant="secondary" onClick={UserLogOut}>
 						<LogOut />
 						Sair
 					</Button>
 				</div>
+
+				{isDatePickerOpen && (
+					<DatePickerModal
+						handleDatePicker={handleDatePicker}
+						dateRange={dateRange}
+						setDateRange={setDateRange}
+					/>
+				)}
 
 				<div
 					className={`flex flex-col gap-6 transition-all duration-300 ${
@@ -207,7 +247,7 @@ export function DashboardPage() {
 							{mainReviews.map((review, index) => (
 								<div
 									key={index}
-									className="flex items-center gap-4 bg-zinc-700 p-4 rounded-md shadow flex-grow hover:bg-zinc-600 transition-all duration-100 cursor-pointer"
+									className="flex items-center gap-4 bg-zinc-700 p-4 rounded-md shadow flex-grow hover:bg-zinc-600 transition-all duration-100"
 								>
 									<div>{review.icon}</div>
 									<div className="flex flex-col">

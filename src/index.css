@@ -9,3 +9,15 @@
 input {
 	color-scheme: dark;
 }
+
+/* Estilos para o DayPicker */
+.custom-day-picker {
+	--rdp-accent-color: #0ea5e9; 
+	--rdp-accent-background-color: #38bdf8; 
+}
+
+.custom-day-picker .rdp-day:hover {
+	transition: all ease-in-out 100ms;
+	background-color: #4ecaff; 
+}
+
