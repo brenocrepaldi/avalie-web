@@ -31,7 +31,7 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 
 			<nav className="w-full space-y-1">
 				<MenuLink
-					link="/home"
+					link="/dashboard"
 					text="Dashboard"
 					icon={<LayoutDashboard />}
 					isMenubarOpen={isMenubarOpen}
