@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useNavigate } from 'react-router-dom';
-import { Header } from '../header';
+import { Header } from '../../components/header';
 import { DatePickerModal } from './dashboard-components/date-picker-modal';
 import { MenuBar } from './dashboard-components/menu-bar/index';
 import { Statistics } from './dashboard-components/statistics';

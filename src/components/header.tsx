@@ -1,4 +1,4 @@
-import { Button } from '../../components/button';
+import { Button } from './button';
 import { LogOut, Calendar } from 'lucide-react';
 
 interface HeaderProps {
