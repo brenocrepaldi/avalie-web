@@ -2,8 +2,8 @@ import {
 	Menu,
 	LayoutDashboard,
 	FileText,
-	Settings,
 	ArrowLeftIcon,
+	User
 } from 'lucide-react';
 import { MenuLink } from './menu-link';
 
@@ -43,9 +43,9 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 					isMenubarOpen={isMenubarOpen}
 				/>
 				<MenuLink
-					link="/settings"
-					text="Configurações"
-					icon={<Settings />}
+					link="/profile"
+					text="Perfil"
+					icon={<User />}
 					isMenubarOpen={isMenubarOpen}
 				/>
 			</nav>

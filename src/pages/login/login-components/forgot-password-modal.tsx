@@ -1,5 +1,6 @@
 import { AtSign, X } from 'lucide-react';
 import { Button } from '../../../components/button';
+import { toast } from 'sonner';
 
 interface ForgotPasswordModalProps {
 	handleForgotPasswordModal: () => void;
@@ -8,6 +9,11 @@ interface ForgotPasswordModalProps {
 export function ForgotPasswordModal({
 	handleForgotPasswordModal,
 }: ForgotPasswordModalProps) {
+	function sendEmail() {
+		// Lógica para envio de e-mail
+		handleForgotPasswordModal();
+		toast.success('E-mail enviado!');
+	}
 	return (
 		<div className="fixed inset-0 bg-black/60 flex items-center justify-center">
 			<div className="w-[640px] rounded-xl py-5 px-6 shadow-shape bg-zinc-800 space-y-5">
@@ -36,7 +42,12 @@ export function ForgotPasswordModal({
 						/>
 					</div>
 				</form>
-				<Button type="submit" variant="secondary" size="full">
+				<Button
+					type="submit"
+					variant="secondary"
+					size="full"
+					onClick={sendEmail}
+				>
 					Enviar e-mail
 				</Button>
 			</div>
