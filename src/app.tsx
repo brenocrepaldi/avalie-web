@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import { LoginPage } from './pages/login/index';
 import { DashboardPage } from './pages/dashboard/index';
-import { ReportsPage } from './pages/reports';
+import { ReportPage } from './pages/report';
 
 export function App() {
 	return (
@@ -15,7 +15,7 @@ export function App() {
 				<Route path="/" element={<Navigate to="/login" />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/dashboard" element={<DashboardPage />} />
-				<Route path="/reports" element={<ReportsPage />} />
+				<Route path="/report" element={<ReportPage />} />
 				<Route path="/settings" element={<DashboardPage />} />
 			</Routes>
 		</Router>

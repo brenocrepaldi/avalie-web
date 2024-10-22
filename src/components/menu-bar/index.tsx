@@ -37,8 +37,8 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 					isMenubarOpen={isMenubarOpen}
 				/>
 				<MenuLink
-					link="/reports"
-					text="Relatórios"
+					link="/report"
+					text="Relatório"
 					icon={<FileText />}
 					isMenubarOpen={isMenubarOpen}
 				/>
