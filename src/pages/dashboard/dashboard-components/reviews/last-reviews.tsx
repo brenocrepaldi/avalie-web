@@ -1,6 +1,6 @@
 import { ThumbsUp, ThumbsDown, Meh } from 'lucide-react';
 
-export const mainReviews = [
+export const lastReviews = [
 	{
 		type: 'Positiva',
 		comment:

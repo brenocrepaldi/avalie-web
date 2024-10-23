@@ -1,11 +1,11 @@
-import { mainReviews } from './main-reviews';
+import { lastReviews } from './last-reviews';
 
 export function Reviews() {
 	return (
 		<div className="bg-zinc-800 p-6 pb-8 rounded-lg shadow-shape text-zinc-300 flex-grow">
-			<h2 className="text-2xl mb-4">Principais avaliações</h2>
+			<h2 className="text-2xl mb-4">Últimas Avaliações</h2>
 			<div className="flex flex-col gap-4">
-				{mainReviews.map((review, index) => (
+				{lastReviews.map((review, index) => (
 					<div
 						key={index}
 						className="flex items-center gap-4 bg-zinc-700 p-4 rounded-md shadow flex-grow hover:bg-zinc-600 transition-all duration-100"
