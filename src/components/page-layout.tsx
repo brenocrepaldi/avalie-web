@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { handleLogout } from '../services/auth';
 import { Header } from './header';
 import { MenuBar } from './menu-bar/index';
 
@@ -14,12 +15,10 @@ export function PageLayout({ title, hasCalendar, children }: PageLayoutProps) {
 	const [isMenubarOpen, setIsMenubarOpen] = useState(false);
 	const [contentVisible, setContentVisible] = useState(false);
 
-	// Função para alternar o menu lateral
 	const toggleMenubar = () => {
 		setIsMenubarOpen(!isMenubarOpen);
 	};
 
-	// Atualiza a opacidade do conteúdo quando o menu é aberto ou fechado
 	useEffect(() => {
 		if (isMenubarOpen) {
 			setContentVisible(false);
@@ -31,6 +30,7 @@ export function PageLayout({ title, hasCalendar, children }: PageLayoutProps) {
 	}, [isMenubarOpen]);
 
 	function UserLogOut() {
+		handleLogout();
 		navigate('/login');
 	}
 

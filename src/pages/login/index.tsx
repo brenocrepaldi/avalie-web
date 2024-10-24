@@ -1,21 +1,37 @@
-import { useState } from 'react';
-import { Button } from '../../components/button';
-import { ForgotPasswordModal } from './login-components/forgot-password-modal';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/button';
+import { handleLogin, storeTokens } from '../../services/auth';
+import { LoginResponse } from '../../services/types';
+import { ForgotPasswordModal } from './login-components/forgot-password-modal';
 
 export function LoginPage() {
 	const navigate = useNavigate();
 	const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
 		useState(false);
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+
+	useEffect(() => {
+		const token = localStorage.getItem('accessToken');
+		if (token) {
+			navigate('/dashboard');
+		}
+	}, [navigate]);
 
 	const handleForgotPasswordModal = () => {
-		isForgotPasswordModalOpen
-			? setIsForgotPasswordModalOpen(false)
-			: setIsForgotPasswordModalOpen(true);
+		setIsForgotPasswordModalOpen(!isForgotPasswordModalOpen);
 	};
 
-	function UserLogIn(path: string) {
-		navigate(path);
+	function UserLogIn(event: React.FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+
+		handleLogin(email, password).then((data: LoginResponse) => {
+			if (data) {
+				storeTokens(data.accessToken, data.refreshToken, data.expiresIn);
+				navigate('/dashboard');
+			}
+		});
 	}
 
 	return (
@@ -25,7 +41,7 @@ export function LoginPage() {
 					<h2 className="text-3xl font-semibold">Login</h2>
 				</div>
 
-				<form className="space-y-3">
+				<form className="space-y-3" onSubmit={UserLogIn}>
 					<p className="text-sm text-zinc-400">
 						Preencha seus dados para realizar o login.
 					</p>
@@ -36,6 +52,8 @@ export function LoginPage() {
 								name="email"
 								placeholder="Digite seu e-mail"
 								className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)} // Atualiza o estado do email
 							/>
 						</div>
 
@@ -45,17 +63,12 @@ export function LoginPage() {
 								name="password"
 								placeholder="Digite sua senha"
 								className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)} // Atualiza o estado da senha
 							/>
 						</div>
 					</div>
-					<Button
-						type="submit"
-						variant="primary"
-						size="full"
-						onClick={() => {
-							UserLogIn('/dashboard');
-						}}
-					>
+					<Button type="submit" variant="primary" size="full">
 						Entrar
 					</Button>
 
