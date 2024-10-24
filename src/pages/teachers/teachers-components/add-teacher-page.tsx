@@ -33,6 +33,8 @@ export function AddTeacherPage() {
 	const registerTeacher = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
+		console.log(formData);
+
 		// Requisição para cadastrar professor no backend
 
 		toast.success(`Professor cadastrado com sucesso!`);
@@ -65,7 +67,7 @@ export function AddTeacherPage() {
 								<div className="space-y-4">
 									<div className="space-y-2">
 										<span className="text-zinc-300">Nome completo</span>
-										<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+										<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 											<input
 												type="text"
 												id="name"
@@ -81,7 +83,7 @@ export function AddTeacherPage() {
 
 									<div className="space-y-2">
 										<span className="text-zinc-300">E-mail</span>
-										<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+										<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 											<input
 												type="email"
 												id="email"
@@ -97,7 +99,7 @@ export function AddTeacherPage() {
 
 									<div className="space-y-2">
 										<span className="text-zinc-300">Senha</span>
-										<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+										<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 											<input
 												type={showPassword ? 'text' : 'password'}
 												name="password"
@@ -123,7 +125,7 @@ export function AddTeacherPage() {
 
 									<div className="space-y-2">
 										<span className="text-zinc-300">RA</span>
-										<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+										<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 											<input
 												type="number"
 												id="ra"
@@ -139,7 +141,7 @@ export function AddTeacherPage() {
 
 									<div className="space-y-2">
 										<span className="text-zinc-300">Disciplina</span>
-										<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+										<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 											<input
 												type="text"
 												id="discipline"

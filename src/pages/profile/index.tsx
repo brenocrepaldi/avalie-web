@@ -62,7 +62,7 @@ export function ProfilePage() {
 						<div className="space-y-3">
 							<div className="pt-2 space-y-2">
 								<span className="text-zinc-300">Nome completo</span>
-								<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+								<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 									<input
 										type="text"
 										name="name"
@@ -75,7 +75,7 @@ export function ProfilePage() {
 							</div>
 							<div className="space-y-2">
 								<span className="text-zinc-300">E-mail</span>
-								<div className="h-12 px-4 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
+								<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
 									<input
 										type="email"
 										name="email"
