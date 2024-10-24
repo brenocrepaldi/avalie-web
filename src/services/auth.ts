@@ -2,9 +2,17 @@ import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
+if (!apiUrl) {
+	throw new Error(
+		'A URL do backend não foi definida. Verifique a variável de ambiente VITE_API_URL.'
+	);
+}
+
 export async function handleLogin(email: string, password: string) {
 	try {
-		const response = await api('http://127.0.0.1:8080/login', {
+		const response = await api(`${apiUrl}/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -41,7 +49,7 @@ export function handleLogout() {
 
 export async function refreshToken() {
 	try {
-		const response = await api('http://127.0.0.1:8080/refresh', {
+		const response = await api(`${apiUrl}/refresh`, {
 			method: 'POST',
 		});
 
