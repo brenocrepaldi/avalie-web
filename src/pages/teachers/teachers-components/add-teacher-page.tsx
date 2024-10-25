@@ -44,7 +44,7 @@ export function AddTeacherPage() {
 		<PageLayout title="Professores">
 			<div className="flex gap-2">
 				<div
-					className="flex items-center justify-center flex-shrink-0 bg-zinc-800 hover:bg-zinc-700 transition-all duration-100 p-4 rounded-lg shadow-lg text-zinc-400 cursor-pointer"
+					className="flex items-center justify-center flex-shrink-0 bg-zinc-700 hover:bg-zinc-600 transition-all duration-100 p-4 rounded-lg shadow-lg text-zinc-400 cursor-pointer"
 					onClick={() => {
 						navigate('/teachers');
 					}}

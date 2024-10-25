@@ -5,26 +5,41 @@ import { teachersData } from './teachers-data'; // alterar para dados do backend
 import { Button } from '../../components/button';
 import { useNavigate } from 'react-router-dom';
 
-// Defina o tipo para o estado expandedTeachers
 type ExpandedTeachersState = {
 	[key: number]: boolean;
+};
+
+type VisibleReviewsState = {
+	[key: number]: number;
 };
 
 export function TeachersPage() {
 	const navigate = useNavigate();
 	const [expandedTeachers, setExpandedTeachers] =
 		useState<ExpandedTeachersState>({});
+	const [visibleReviews, setVisibleReviews] = useState<VisibleReviewsState>({});
 	const [searchTerm, setSearchTerm] = useState('');
 
-	// Função para alternar entre expandir e colapsar o conteúdo do professor
 	const toggleExpand = (id: number) => {
-		setExpandedTeachers((prevState) => ({
-			...prevState,
-			[id]: !prevState[id],
-		}));
+		setExpandedTeachers((prevState) => {
+			const isExpanding = !prevState[id];
+			const newExpandedState = {
+				...prevState,
+				[id]: isExpanding,
+			};
+
+			// Se o professor for fechado, removemos as avaliações visíveis
+			if (!isExpanding) {
+				setVisibleReviews((prevVisibleReviews) => ({
+					...prevVisibleReviews,
+					[id]: 3, // ou qualquer número de avaliações padrão ao fechar
+				}));
+			}
+
+			return newExpandedState;
+		});
 	};
 
-	// Função para renderizar estrelas com base na avaliação
 	const renderStars = (rating: number) => {
 		const maxStars = 5;
 		const starElements = [];
@@ -48,7 +63,13 @@ export function TeachersPage() {
 		setSearchTerm(e.target.value);
 	};
 
-	// Filtra os professores com base no termo de busca
+	const handleShowMoreReviews = (teacherId: number) => {
+		setVisibleReviews((prevState) => ({
+			...prevState,
+			[teacherId]: (prevState[teacherId] || 3) + 3, // Mostra mais 3 avaliações
+		}));
+	};
+
 	const filteredTeachers = teachersData.filter((teacher) =>
 		teacher.nome.toLowerCase().includes(searchTerm.toLowerCase())
 	);
@@ -82,7 +103,10 @@ export function TeachersPage() {
 						{filteredTeachers.map((teacher) => (
 							<div
 								key={teacher.id}
-								className="p-4 bg-zinc-700 rounded-lg hover:bg-zinc-600 transition-all duration-100 ease-in-out space-y-6"
+								className={`p-4 bg-zinc-700 rounded-lg transition-all duration-100 ease-in-out space-y-6 ${
+									!expandedTeachers[teacher.id] &&
+									'hover:bg-zinc-600 cursor-pointer'
+								}`}
 								onClick={() => toggleExpand(teacher.id)}
 							>
 								<div className="flex items-center justify-between">
@@ -100,54 +124,73 @@ export function TeachersPage() {
 										className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-6 mt-6 p-6 bg-zinc-800 rounded-lg shadow-md"
 										onClick={(e) => e.stopPropagation()}
 									>
-										<div className="pb-4 border-b border-zinc-600 flex flex-col space-y-2">
+										<div className="border-zinc-600 flex gap-2 items-baseline">
 											<span className="text-lg font-semibold text-zinc-100">
 												Disciplina:
 											</span>
-											<span className="text-base text-zinc-400">
+											<span className="text-zinc-400">
 												{teacher.disciplina}
 											</span>
 										</div>
 
-										<div className="pb-4 border-b border-zinc-600 flex flex-col space-y-2">
+										<div className="h-[1px] rounded-lg bg-zinc-700" />
+
+										<div className="border-zinc-600 flex gap-2 items-baseline">
 											<span className="text-lg font-semibold text-zinc-100">
 												Turmas:
 											</span>
-											<span className="text-base text-zinc-400">
+											<span className="text-zinc-400">
 												{teacher.turmas.join(', ')}
 											</span>
 										</div>
 
-										<div className="pb-4 border-b border-zinc-600 flex items-center gap-4">
+										<div className="h-[1px] rounded-lg bg-zinc-700" />
+
+										<div className="border-zinc-600 flex gap-2 items-center">
 											<span className="text-lg font-semibold text-zinc-100">
 												Média de Avaliação:
 											</span>
-											<div className="flex items-center gap-1">
+											<div className="flex items-center">
 												{renderStars(teacher.mediaAvaliacao)}
 											</div>
 										</div>
+
+										<div className="h-[1px] rounded-lg bg-zinc-700" />
 
 										<div className="space-y-4">
 											<h3 className="text-lg font-semibold text-zinc-100">
 												Avaliações:
 											</h3>
-											<ul className="space-y-2">
-												{teacher.avaliacoes.map((avaliacao, index) => (
-													<li key={index} className="flex rounded-lg">
-														<div className="w-full px-4 py-4 bg-zinc-700 rounded-xl shadow-shape flex items-center gap-3">
-															<span className="text-zinc-100 flex">
-																{renderStars(avaliacao.nota)}
-															</span>
-															<span className="text-zinc-300 italic">
-																"{avaliacao.comentario}"
-															</span>
-															<span className="text-zinc-400 text-sm ml-auto">
-																{avaliacao.data}
-															</span>
-														</div>
-													</li>
-												))}
+											<ul className="space-y-3">
+												{teacher.avaliacoes
+													.slice(0, visibleReviews[teacher.id] || 3)
+													.map((avaliacao, index) => (
+														<li key={index} className="flex rounded-lg">
+															<div className="w-full px-4 py-4 bg-zinc-700 rounded-xl shadow-shape flex items-center gap-3">
+																<span className="text-zinc-100 flex">
+																	{renderStars(avaliacao.nota)}
+																</span>
+																<span className="text-zinc-300 italic">
+																	"{avaliacao.comentario}"
+																</span>
+																<span className="text-zinc-400 text-sm ml-auto">
+																	{avaliacao.data}
+																</span>
+															</div>
+														</li>
+													))}
 											</ul>
+											{(visibleReviews[teacher.id] || 3) <
+												teacher.avaliacoes.length && (
+												<Button
+													onClick={() => handleShowMoreReviews(teacher.id)}
+													className="text-zinc-400 hover:text-zinc-200 underline mt-2"
+													variant="secondary"
+													size="full"
+												>
+													Mostrar mais
+												</Button>
+											)}
 										</div>
 									</div>
 								)}

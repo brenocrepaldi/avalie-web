@@ -16,6 +16,36 @@ export const teachersData = [
 				nota: 3.95,
 				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
 			},
+			{
+				data: '05/10/2024',
+				nota: 4.25,
+				comentario: 'Muito claro nas explicações.',
+			},
+			{
+				data: '10/10/2024',
+				nota: 3.95,
+				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
+			},
+			{
+				data: '05/10/2024',
+				nota: 4.25,
+				comentario: 'Muito claro nas explicações.',
+			},
+			{
+				data: '10/10/2024',
+				nota: 3.95,
+				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
+			},
+			{
+				data: '05/10/2024',
+				nota: 4.25,
+				comentario: 'Muito claro nas explicações.',
+			},
+			{
+				data: '10/10/2024',
+				nota: 3.95,
+				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
+			},
 		],
 	},
 	{
