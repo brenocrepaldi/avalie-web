@@ -4,6 +4,7 @@ import { PageLayout } from '../../components/page-layout';
 import { teachersData } from './teachers-data'; // alterar para dados do backend futuramente
 import { Button } from '../../components/button';
 import { useNavigate } from 'react-router-dom';
+import { Input } from '../../components/input';
 
 type ExpandedTeachersState = {
 	[key: number]: boolean;
@@ -28,11 +29,10 @@ export function TeachersPage() {
 				[id]: isExpanding,
 			};
 
-			// Se o professor for fechado, removemos as avaliações visíveis
 			if (!isExpanding) {
 				setVisibleReviews((prevVisibleReviews) => ({
 					...prevVisibleReviews,
-					[id]: 3, // ou qualquer número de avaliações padrão ao fechar
+					[id]: 3,
 				}));
 			}
 
@@ -66,7 +66,7 @@ export function TeachersPage() {
 	const handleShowMoreReviews = (teacherId: number) => {
 		setVisibleReviews((prevState) => ({
 			...prevState,
-			[teacherId]: (prevState[teacherId] || 3) + 3, // Mostra mais 3 avaliações
+			[teacherId]: (prevState[teacherId] || 3) + 3,
 		}));
 	};
 
@@ -82,17 +82,15 @@ export function TeachersPage() {
 						<PlusIcon />
 						Adicionar Professor
 					</Button>
-					<div className="h-12 w-1/4 bg-zinc-900 rounded-lg px-2 flex items-center gap-2">
-						<Search className="text-zinc-400 size-5" />
-						<input
-							type="text"
-							name="professor"
-							placeholder="Buscar professor"
-							className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
-							value={searchTerm}
-							onChange={handleSearchChange}
-						/>
-					</div>
+
+					<Input
+						icon={<Search />}
+						type="text"
+						name="professor"
+						placeholder="Buscar professor"
+						value={searchTerm}
+						onChange={handleSearchChange}
+					/>
 				</div>
 
 				<div className="h-[1px] rounded-lg bg-zinc-700" />

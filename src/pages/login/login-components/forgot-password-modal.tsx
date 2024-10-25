@@ -1,6 +1,8 @@
 import { AtSign, X } from 'lucide-react';
 import { Button } from '../../../components/button';
 import { toast } from 'sonner';
+import { Input } from '../../../components/input';
+import { useState } from 'react';
 
 interface ForgotPasswordModalProps {
 	handleForgotPasswordModal: () => void;
@@ -9,6 +11,7 @@ interface ForgotPasswordModalProps {
 export function ForgotPasswordModal({
 	handleForgotPasswordModal,
 }: ForgotPasswordModalProps) {
+	const [email, setEmail] = useState('');
 	function sendEmail() {
 		// Lógica para envio de e-mail
 		handleForgotPasswordModal();
@@ -31,19 +34,21 @@ export function ForgotPasswordModal({
 
 				<div className="w-full h-px bg-zinc-700" />
 
-				<form className="p-2.5 bg-zinc-950 border-zinc-800 rounded-lg flex items-center gap-2">
-					<div className="px-2 flex items-center flex-1 gap-2">
-						<AtSign className="text-zinc-400 size-5" />
-						<input
-							type="email"
-							name="email"
-							placeholder="Digite seu e-mail"
-							className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
-						/>
-					</div>
-				</form>
+				<Input
+					icon={<AtSign />}
+					type="email"
+					id="email"
+					name="email"
+					value={email}
+					onChange={(e) => {
+						setEmail(e.target.value);
+					}}
+					placeholder="Digite seu e-mail"
+					fullSize={true}
+					required
+				/>
 				<Button
-					type="submit"
+					type="button"
 					variant="secondary"
 					size="full"
 					onClick={sendEmail}

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Button } from '../../components/button';
 import { PageLayout } from '../../components/page-layout';
-import { EyeIcon, EyeOff, LockOpenIcon, Pencil } from 'lucide-react';
+import { LockOpenIcon, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
+import { Input } from '../../components/input';
 
 export function ProfilePage() {
 	const [name, setName] = useState('Nome do usuário');
@@ -62,29 +63,23 @@ export function ProfilePage() {
 						<div className="space-y-3">
 							<div className="pt-2 space-y-2">
 								<span className="text-zinc-300">Nome completo</span>
-								<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
-									<input
-										type="text"
-										name="name"
-										placeholder="Insira seu nome completo"
-										value={name}
-										onChange={(e) => setName(e.target.value)}
-										className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
-									/>
-								</div>
+								<Input
+									type="text"
+									name="name"
+									placeholder="Insira seu nome completo"
+									value={name}
+									onChange={(e) => setName(e.target.value)}
+								/>
 							</div>
 							<div className="space-y-2">
 								<span className="text-zinc-300">E-mail</span>
-								<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
-									<input
-										type="email"
-										name="email"
-										placeholder="Insira seu e-mail"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
-									/>
-								</div>
+								<Input
+									type="email"
+									name="email"
+									placeholder="Insira seu e-mail"
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
+								/>
 							</div>
 
 							<Button type="button" size="full" onClick={changeInfo}>
@@ -111,23 +106,17 @@ export function ProfilePage() {
 							<div className="space-y-3">
 								<div>
 									<span className="text-zinc-300">Nova senha</span>
-									<div className="h-12 px-4 bg-zinc-900 border-zinc-700 border-2 rounded-lg flex items-center gap-2">
-										<input
-											type={showPassword ? 'text' : 'password'}
-											name="password"
-											placeholder="Insira uma nova senha"
-											value={password}
-											onChange={(e) => setPassword(e.target.value)}
-											className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
-										/>
-										<button onClick={handlePasswordVisibility}>
-											{showPassword ? (
-												<EyeOff className="text-zinc-400" />
-											) : (
-												<EyeIcon className="text-zinc-400" />
-											)}
-										</button>
-									</div>
+									<Input
+										isPassword={true}
+										handlePasswordVisibility={handlePasswordVisibility}
+										showPassword={showPassword}
+										type={showPassword ? 'text' : 'password'}
+										name="password"
+										placeholder="Insira uma nova senha"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										required
+									/>
 								</div>
 
 								<Button type="button" size="full" onClick={changePassword}>
