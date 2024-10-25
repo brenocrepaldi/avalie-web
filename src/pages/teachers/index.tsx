@@ -34,7 +34,7 @@ export function TeachersPage() {
 			starElements.push(
 				<Star
 					key={i}
-					className={`h-5 w-5 ${
+					className={`h-6 w-6 ${
 						i <= roundedRating ? 'text-yellow-400' : 'text-gray-400'
 					}`}
 				/>
@@ -76,8 +76,8 @@ export function TeachersPage() {
 
 				<div className="h-[1px] rounded-lg bg-zinc-700" />
 
-				<div>
-					<h2 className="text-2xl mb-4">Lista de Professores</h2>
+				<div className="space-y-6">
+					<h2 className="text-2xl">Lista de Professores</h2>
 					<div className="px-2 rounded-md flex flex-col space-y-4">
 						{filteredTeachers.map((teacher) => (
 							<div
@@ -86,7 +86,7 @@ export function TeachersPage() {
 								onClick={() => toggleExpand(teacher.id)}
 							>
 								<div className="flex items-center justify-between">
-									<h2 className="text-xl font-bold cursor-pointer">
+									<h2 className="text-xl font-bold cursor-pointer text-zinc-300">
 										{teacher.nome}
 									</h2>
 									{expandedTeachers[teacher.id] ? (
@@ -97,54 +97,54 @@ export function TeachersPage() {
 								</div>
 								{expandedTeachers[teacher.id] && (
 									<div
-										className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-4 mt-4 p-4 bg-zinc-800 rounded-md"
+										className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-6 mt-6 p-6 bg-zinc-800 rounded-lg shadow-md"
 										onClick={(e) => e.stopPropagation()}
 									>
-										<div className="border-b border-zinc-600 pb-2">
-											<span className="block font-semibold text-lg text-zinc-100">
+										<div className="pb-4 border-b border-zinc-600 flex flex-col space-y-2">
+											<span className="text-lg font-semibold text-zinc-100">
 												Disciplina:
 											</span>
-											<span className="text-zinc-400">
+											<span className="text-base text-zinc-400">
 												{teacher.disciplina}
 											</span>
 										</div>
-										<div className="border-b border-zinc-600 pb-2">
-											<span className="block font-semibold text-lg text-zinc-100">
+
+										<div className="pb-4 border-b border-zinc-600 flex flex-col space-y-2">
+											<span className="text-lg font-semibold text-zinc-100">
 												Turmas:
 											</span>
-											<span className="text-zinc-400">
+											<span className="text-base text-zinc-400">
 												{teacher.turmas.join(', ')}
 											</span>
 										</div>
-										<div className="flex items-center gap-2 border-b border-zinc-600 pb-2">
-											<span className="block font-semibold text-lg text-zinc-100">
+
+										<div className="pb-4 border-b border-zinc-600 flex items-center gap-4">
+											<span className="text-lg font-semibold text-zinc-100">
 												Média de Avaliação:
 											</span>
-											<div className="flex">
+											<div className="flex items-center gap-1">
 												{renderStars(teacher.mediaAvaliacao)}
 											</div>
 										</div>
-										<div>
-											<h3 className="font-semibold text-lg text-zinc-100 mb-2">
+
+										<div className="space-y-4">
+											<h3 className="text-lg font-semibold text-zinc-100">
 												Avaliações:
 											</h3>
-											<ul className="list-disc pl-5 text-zinc-400">
+											<ul className="space-y-2">
 												{teacher.avaliacoes.map((avaliacao, index) => (
-													<li key={index} className="mb-1">
-														<span className="text-zinc-100">
-															{avaliacao.data}
-														</span>
-														-
-														<span className="text-teal-400">
-															{avaliacao.turma}
-														</span>
-														:
-														<div className="flex">
-															{renderStars(avaliacao.nota)}
+													<li key={index} className="flex rounded-lg">
+														<div className="w-full px-4 py-4 bg-zinc-700 rounded-xl shadow-shape flex items-center gap-3">
+															<span className="text-zinc-100 flex">
+																{renderStars(avaliacao.nota)}
+															</span>
+															<span className="text-zinc-300 italic">
+																"{avaliacao.comentario}"
+															</span>
+															<span className="text-zinc-400 text-sm ml-auto">
+																{avaliacao.data}
+															</span>
 														</div>
-														<span className="text-zinc-300">
-															({avaliacao.comentario})
-														</span>
 													</li>
 												))}
 											</ul>
