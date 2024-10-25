@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { Button } from '../button';
 import { DatePickerModal } from './header-components/date-picker-modal';
+import { LogOutModal } from './header-components/log-out-modal';
 
 interface HeaderProps {
 	title: string;
@@ -17,6 +18,7 @@ export function Header({
 	UserLogOut,
 	hasCalendar = false,
 }: HeaderProps) {
+	const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 	const [dateRange, setDateRange] = useState<DateRange | undefined>({
 		from: subDays(new Date(), 30),
@@ -24,7 +26,16 @@ export function Header({
 	});
 
 	const handleDatePicker = () => {
-		isDatePickerOpen ? setIsDatePickerOpen(false) : setIsDatePickerOpen(true);
+		setIsDatePickerOpen(!isDatePickerOpen);
+	};
+
+	const handleLogOutModal = () => {
+		setIsLogOutModalOpen(!isLogOutModalOpen);
+	};
+
+	const handleLogOut = () => {
+		UserLogOut();
+		handleLogOutModal();
 	};
 
 	const displayedDate =
@@ -35,6 +46,7 @@ export function Header({
 					{ locale: ptBR }
 				)}`
 			: null;
+
 	return (
 		<div className="bg-zinc-800 p-4 rounded-lg shadow-shape flex justify-between items-center">
 			<h1 className="text-2xl font-semibold text-zinc-200">{title}</h1>
@@ -51,10 +63,17 @@ export function Header({
 				</button>
 			)}
 
-			<Button type="button" variant="secondary" onClick={UserLogOut}>
+			<Button type="button" variant="secondary" onClick={handleLogOutModal}>
 				<LogOut />
 				Sair
 			</Button>
+
+			{isLogOutModalOpen && (
+				<LogOutModal
+					handleLogOutModal={handleLogOutModal}
+					handleLogOut={handleLogOut}
+				/>
+			)}
 
 			{isDatePickerOpen && (
 				<DatePickerModal
