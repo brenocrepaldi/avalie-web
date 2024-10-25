@@ -12,22 +12,23 @@ type ExpandedTeachersState = {
 
 export function TeachersPage() {
 	const navigate = useNavigate();
-	// Tipagem explícita para o estado expandedTeachers
 	const [expandedTeachers, setExpandedTeachers] =
 		useState<ExpandedTeachersState>({});
+	const [searchTerm, setSearchTerm] = useState('');
 
 	// Função para alternar entre expandir e colapsar o conteúdo do professor
 	const toggleExpand = (id: number) => {
 		setExpandedTeachers((prevState) => ({
 			...prevState,
-			[id]: !prevState[id], // Alterna o estado expandido/colapsado
+			[id]: !prevState[id],
 		}));
 	};
 
+	// Função para renderizar estrelas com base na avaliação
 	const renderStars = (rating: number) => {
 		const maxStars = 5;
 		const starElements = [];
-		const roundedRating = Math.round((rating / 10) * 5); // Converter a nota de 0 a 10 para 0 a 5 estrelas
+		const roundedRating = Math.round(rating);
 
 		for (let i = 1; i <= maxStars; i++) {
 			starElements.push(
@@ -42,6 +43,15 @@ export function TeachersPage() {
 
 		return starElements;
 	};
+
+	const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(e.target.value);
+	};
+
+	// Filtra os professores com base no termo de busca
+	const filteredTeachers = teachersData.filter((teacher) =>
+		teacher.nome.toLowerCase().includes(searchTerm.toLowerCase())
+	);
 
 	return (
 		<PageLayout title="Professores">
@@ -58,6 +68,8 @@ export function TeachersPage() {
 							name="professor"
 							placeholder="Buscar professor"
 							className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
+							value={searchTerm}
+							onChange={handleSearchChange}
 						/>
 					</div>
 				</div>
@@ -67,7 +79,7 @@ export function TeachersPage() {
 				<div>
 					<h2 className="text-2xl mb-4">Lista de Professores</h2>
 					<div className="px-2 rounded-md flex flex-col space-y-4">
-						{teachersData.map((teacher) => (
+						{filteredTeachers.map((teacher) => (
 							<div
 								key={teacher.id}
 								className="p-4 bg-zinc-700 rounded-lg hover:bg-zinc-600 transition-all duration-100 ease-in-out space-y-6"
