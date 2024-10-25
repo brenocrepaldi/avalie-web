@@ -26,10 +26,8 @@ export const getFeedbackOption = () => {
 					},
 				},
 				label: {
-					textStyle: {
-						color: '#ffffff',
-						fontFamily: 'Inter, sans-serif',
-					},
+					color: '#ffffff',
+					fontFamily: 'Inter, sans-serif',
 				},
 			},
 		],
@@ -64,6 +62,8 @@ export const getGradesOption = () => {
 				stack: 'total',
 				label: {
 					show: true,
+					color: '#ffffff',
+					fontFamily: 'Inter, sans-serif',
 				},
 				emphasis: {
 					focus: 'series',
@@ -71,7 +71,7 @@ export const getGradesOption = () => {
 				data: [30, 34, 43],
 				itemStyle: {
 					color: '#3b82f6',
-					barBorderRadius: [0, 7, 7, 0],
+					borderRadius: [0, 7, 7, 0],
 				},
 			},
 			{
@@ -80,6 +80,8 @@ export const getGradesOption = () => {
 				stack: 'total',
 				label: {
 					show: true,
+					color: '#ffffff',
+					fontFamily: 'Inter, sans-serif',
 				},
 				emphasis: {
 					focus: 'series',
@@ -87,7 +89,7 @@ export const getGradesOption = () => {
 				data: [12, 13, 10],
 				itemStyle: {
 					color: '#71717a',
-					barBorderRadius: [7, 7, 7, 7],
+					borderRadius: [7, 7, 7, 7],
 				},
 			},
 			{
@@ -96,6 +98,8 @@ export const getGradesOption = () => {
 				stack: 'total',
 				label: {
 					show: true,
+					color: '#ffffff',
+					fontFamily: 'Inter, sans-serif',
 				},
 				emphasis: {
 					focus: 'series',
@@ -103,7 +107,7 @@ export const getGradesOption = () => {
 				data: [7, 9, 4],
 				itemStyle: {
 					color: '#ef4444',
-					barBorderRadius: [7, 7, 7, 7],
+					borderRadius: [7, 7, 7, 7],
 				},
 			},
 		],
