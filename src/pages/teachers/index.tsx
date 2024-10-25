@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, Star, PlusIcon } from 'lucide-react';
+import { ChevronDown, ChevronUp, Star, PlusIcon, Search } from 'lucide-react';
 import { useState } from 'react';
 import { PageLayout } from '../../components/page-layout';
 import { teachersData } from './teachers-data'; // alterar para dados do backend futuramente
@@ -51,11 +51,13 @@ export function TeachersPage() {
 						<PlusIcon />
 						Adicionar Professor
 					</Button>
-					<div className="h-12 w-1/4 px-4 bg-zinc-900 border-zinc-800 rounded-lg flex items-center">
+					<div className="h-12 w-1/4 bg-zinc-900 rounded-lg px-2 flex items-center gap-2">
+						<Search className="text-zinc-400 size-5" />
 						<input
 							type="text"
+							name="professor"
 							placeholder="Buscar professor"
-							className="bg-transparent text-base placeholder-zinc-400 outline-none flex-1"
+							className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1"
 						/>
 					</div>
 				</div>
@@ -82,7 +84,10 @@ export function TeachersPage() {
 									)}
 								</div>
 								{expandedTeachers[teacher.id] && (
-									<div className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-4 mt-4 p-4 bg-zinc-800 rounded-md">
+									<div
+										className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-4 mt-4 p-4 bg-zinc-800 rounded-md"
+										onClick={(e) => e.stopPropagation()}
+									>
 										<div className="border-b border-zinc-600 pb-2">
 											<span className="block font-semibold text-lg text-zinc-100">
 												Disciplina:
