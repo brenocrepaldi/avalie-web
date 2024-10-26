@@ -1,3 +1,18 @@
+export interface RatingProps {
+	data: string;
+	nota: number;
+	comentario: string;
+}
+
+export interface TeacherDataProps {
+	id: number;
+	nome: string;
+	disciplina: string;
+	turmas: string[];
+	mediaAvaliacao: number;
+	avaliacoes: RatingProps[];
+}
+
 export const teachersData = [
 	{
 		id: 1,
