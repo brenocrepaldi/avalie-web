@@ -3,6 +3,8 @@ import { ptBR } from 'date-fns/locale';
 import { Calendar, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
+import { useNavigate } from 'react-router-dom';
+import homeLogo from '../../assets/home-logo.png';
 import { Button } from '../button';
 import { DatePickerModal } from './header-components/date-picker-modal';
 import { LogOutModal } from './header-components/log-out-modal';
@@ -18,6 +20,7 @@ export function Header({
 	UserLogOut,
 	hasCalendar = false,
 }: HeaderProps) {
+	const navigate = useNavigate();
 	const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 	const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -47,41 +50,53 @@ export function Header({
 				)}`
 			: null;
 
+	function goHome() {
+		navigate('/');
+	}
+
 	return (
-		<div className="bg-zinc-800 p-4 rounded-lg shadow-shape flex justify-between items-center">
-			<h1 className="text-2xl font-semibold text-zinc-200">{title}</h1>
-
-			{hasCalendar && (
-				<button
-					onClick={handleDatePicker}
-					className="flex items-center gap-2 text-left"
-				>
-					<Calendar className="size-5 text-zinc-400" />
-					<span className="text-lg text-zinc-400">
-						{displayedDate || 'Selecione o período'}
-					</span>
-				</button>
-			)}
-
-			<Button type="button" variant="secondary" onClick={handleLogOutModal}>
-				<LogOut />
-				Sair
-			</Button>
-
-			{isLogOutModalOpen && (
-				<LogOutModal
-					handleLogOutModal={handleLogOutModal}
-					handleLogOut={handleLogOut}
+		<div className="flex gap-3">
+			<div
+				className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-lg shadow-shape flex justify-between items-center cursor-pointer  transition duration-100"
+				onClick={goHome}
+			>
+				<img
+					src={homeLogo}
+					alt="Logo Avali-e"
+					className="w-14 h-auto mx-auto"
 				/>
-			)}
-
-			{isDatePickerOpen && (
-				<DatePickerModal
-					handleDatePicker={handleDatePicker}
-					dateRange={dateRange}
-					setDateRange={setDateRange}
-				/>
-			)}
+			</div>
+			<div className="bg-zinc-800 p-4 rounded-lg shadow-shape flex justify-between items-center w-full">
+				<h1 className="text-2xl font-semibold text-zinc-200">{title}</h1>
+				{hasCalendar && (
+					<button
+						onClick={handleDatePicker}
+						className="flex items-center gap-2 text-left"
+					>
+						<Calendar className="size-5 text-zinc-400" />
+						<span className="text-lg text-zinc-400">
+							{displayedDate || 'Selecione o período'}
+						</span>
+					</button>
+				)}
+				<Button type="button" variant="secondary" onClick={handleLogOutModal}>
+					<LogOut />
+					Sair
+				</Button>
+				{isLogOutModalOpen && (
+					<LogOutModal
+						handleLogOutModal={handleLogOutModal}
+						handleLogOut={handleLogOut}
+					/>
+				)}
+				{isDatePickerOpen && (
+					<DatePickerModal
+						handleDatePicker={handleDatePicker}
+						dateRange={dateRange}
+						setDateRange={setDateRange}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }

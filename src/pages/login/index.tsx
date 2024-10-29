@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 import { handleLogin, storeTokens } from '../../services/auth';
 import { LoginResponse } from '../../services/types';
 import { ForgotPasswordModal } from './login-components/forgot-password-modal';
@@ -42,9 +43,15 @@ export function LoginPage() {
 
 	return (
 		<div className="bg-zinc-900 h-screen flex items-center justify-center">
-			<div className="bg-zinc-800 w-[700px] h-auto rounded-xl py-7 px-12 shadow-shape flex flex-col justify-center gap-10">
+			<div className="bg-zinc-800 w-[700px] h-auto rounded-xl pt-0 py-7 px-12 shadow-shape flex flex-col justify-center">
 				<div className="w-full text-center">
-					<h2 className="text-3xl font-semibold">Login</h2>
+					<div className="w-full">
+						<img
+							src={logo}
+							alt="Logo Avali-e"
+							className="w-52 h-auto mx-auto"
+						/>
+					</div>
 				</div>
 				<LoginForm
 					UserLogIn={UserLogIn}
