@@ -24,7 +24,7 @@ export function ReviewsPage() {
 					className={`h-6 w-6 transition-colors ${
 						i <= (clickable ? selectedRating || 0 : rating)
 							? 'text-yellow-400'
-							: 'text-gray-400'
+							: 'text-gray-500'
 					} ${clickable && 'cursor-pointer'}`}
 					onClick={() => clickable && setSelectedRating(i)}
 				/>
@@ -67,14 +67,14 @@ export function ReviewsPage() {
 					<div className="h-[1px] rounded-lg bg-zinc-700" />
 
 					{filterOpen ? (
-						<div className="p-4 rounded-md bg-zinc-600 flex justify-center gap-2 items-center mb-6 transition-all">
+						<div className="p-4 rounded-md bg-zinc-900 flex justify-center gap-2 items-center mb-6 transition-all">
 							<span className="text-lg font-semibold text-zinc-100">
 								Filtrar por estrelas:
 							</span>
 							<div className="flex gap-1">{renderStars(5, true)}</div>
 						</div>
 					) : (
-						<div className="p-4 rounded-md bg-zinc-900 flex justify-around items-center mb-6 transition-all">
+						<div className="p-4 rounded-md bg-zinc-700 flex justify-around items-center mb-6 transition-all">
 							<div className="flex items-center gap-2">
 								<span className="text-xl font-semibold text-zinc-200">
 									Total de avaliações:
