@@ -21,11 +21,11 @@ export function ReviewsPage() {
 			stars.push(
 				<Star
 					key={i}
-					className={`h-6 w-6 cursor-pointer transition-colors ${
+					className={`h-6 w-6 transition-colors ${
 						i <= (clickable ? selectedRating || 0 : rating)
 							? 'text-yellow-400'
 							: 'text-gray-400'
-					}`}
+					} ${clickable && 'cursor-pointer'}`}
 					onClick={() => clickable && setSelectedRating(i)}
 				/>
 			);
@@ -47,7 +47,7 @@ export function ReviewsPage() {
 	return (
 		<PageLayout title="Dashboard">
 			<div className="bg-zinc-800 p-6 pb-8 rounded-lg shadow-md">
-				<div className="w-[80%] mx-auto space-y-6">
+				<div className="space-y-6">
 					<div className="flex justify-between items-center mb-6">
 						<h2 className="text-2xl text-zinc-200">Todas avaliações</h2>
 						<button
@@ -60,7 +60,7 @@ export function ReviewsPage() {
 							}`}
 							aria-label="Toggle Filter"
 						>
-							<SlidersVertical className="h-6 w-6" />
+							<SlidersVertical className="h-7 w-7" />
 						</button>
 					</div>
 
@@ -93,7 +93,7 @@ export function ReviewsPage() {
 					)}
 
 					{/* Avaliações Filtradas */}
-					<div className="flex flex-col gap-4">
+					<div className="min-h-40 flex flex-col gap-4 p-10 px-20 bg-zinc-900 rounded-lg items-center justify-center">
 						{filteredReviews.length > 0 ? (
 							filteredReviews.map((review, index) => (
 								<div
@@ -112,7 +112,7 @@ export function ReviewsPage() {
 								</div>
 							))
 						) : (
-							<div className="text-zinc-400 text-center pt-10">
+							<div className="text-zinc-400 text-center">
 								Nenhuma avaliação encontrada.
 							</div>
 						)}
