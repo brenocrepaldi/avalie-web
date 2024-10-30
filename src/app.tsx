@@ -11,7 +11,7 @@ import { ReportPage } from './pages/report';
 import { TeachersPage } from './pages/teachers';
 import { AddTeacherPage } from './pages/teachers/teachers-components/add-teacher-page';
 import { ProfilePage } from './pages/profile';
-import { ReviewsPage } from './pages/dashboard/reviews-page';
+import { ReviewsPage } from './pages/reviews';
 
 export function App() {
 	return (

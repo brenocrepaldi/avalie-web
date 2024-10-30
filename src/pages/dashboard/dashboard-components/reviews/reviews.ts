@@ -1,3 +1,9 @@
+export interface ReviewType {
+	rating: number;
+	comment: string;
+	date: string;
+}
+
 export const reviews = [
 	{
 		rating: 5,
