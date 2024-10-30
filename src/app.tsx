@@ -11,6 +11,7 @@ import { ReportPage } from './pages/report';
 import { TeachersPage } from './pages/teachers';
 import { AddTeacherPage } from './pages/teachers/teachers-components/add-teacher-page';
 import { ProfilePage } from './pages/profile';
+import { ReviewsPage } from './pages/dashboard/reviews-page';
 
 export function App() {
 	return (
@@ -23,6 +24,14 @@ export function App() {
 					element={
 						<PrivateRoute>
 							<DashboardPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/dashboard/reviews"
+					element={
+						<PrivateRoute>
+							<ReviewsPage />
 						</PrivateRoute>
 					}
 				/>
