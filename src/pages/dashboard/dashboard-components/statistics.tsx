@@ -1,23 +1,9 @@
 import ReactECharts from 'echarts-for-react';
-import { getFeedbackOption, getGradesOption } from './chart-options';
-import { Star } from 'lucide-react';
-
-function renderStars(rating: number) {
-	const maxStars = 5;
-	const stars = [];
-
-	for (let i = 1; i <= maxStars; i++) {
-		stars.push(
-			<Star
-				key={i}
-				className={`h-6 w-6 ${
-					i <= rating ? 'text-yellow-400' : 'text-gray-400'
-				}`}
-			/>
-		);
-	}
-	return stars;
-}
+import { renderStars } from '../../../utils/reviewUtils';
+import {
+	getFeedbackOption,
+	getGradesOption,
+} from '../../../utils/statisticUtils';
 
 export function Statistics() {
 	return (

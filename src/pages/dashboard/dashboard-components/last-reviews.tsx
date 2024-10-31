@@ -1,26 +1,9 @@
-import { Star } from 'lucide-react';
-import { Button } from '../../../../components/button';
-import { reviews } from './reviews';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../../../components/button';
+import { reviews } from '../../../utils/lastReviewsUtils';
+import { renderStars } from '../../../utils/reviewUtils';
 
-function renderStars(rating: number) {
-	const maxStars = 5;
-	const stars = [];
-
-	for (let i = 1; i <= maxStars; i++) {
-		stars.push(
-			<Star
-				key={i}
-				className={`h-6 w-6 ${
-					i <= rating ? 'text-yellow-400' : 'text-gray-400'
-				}`}
-			/>
-		);
-	}
-	return stars;
-}
-
-export function Reviews() {
+export function LastReviews() {
 	const navigate = useNavigate();
 
 	return (

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { ReactNode } from 'react';
 import { Button } from '../../../components/button';
 import { ExpandedTeachersState, VisibleReviewsState } from '../index';
-import { TeacherDataProps } from '../teachers-data';
+import { TeacherDataProps } from '../../../utils/teachersUtils';
 
 interface TeacherListProps {
 	filteredTeachers: TeacherDataProps[];

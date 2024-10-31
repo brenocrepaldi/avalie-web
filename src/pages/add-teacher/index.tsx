@@ -1,10 +1,10 @@
 import { ChevronLeft, PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../../components/button';
-import { PageLayout } from '../../../components/page-layout';
+import { Button } from '../../components/button';
+import { PageLayout } from '../../components/page-layout';
 import { toast } from 'sonner';
-import { Input } from '../../../components/input';
+import { Input } from '../../components/input';
 
 export function AddTeacherPage() {
 	const navigate = useNavigate();

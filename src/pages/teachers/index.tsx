@@ -5,7 +5,7 @@ import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { PageLayout } from '../../components/page-layout';
 import { TeacherList } from './teachers-components/teacher-list';
-import { teachersData } from './teachers-data'; // alterar para dados do backend futuramente
+import { teachersData } from '../../utils/teachersUtils'; // alterar para dados do backend futuramente
 
 export type ExpandedTeachersState = {
 	[key: number]: boolean;

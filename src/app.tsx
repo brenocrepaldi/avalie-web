@@ -7,9 +7,8 @@ import {
 import { PrivateRoute } from './routes/private-route';
 import { LoginPage } from './pages/login/index';
 import { DashboardPage } from './pages/dashboard/index';
-import { ReportPage } from './pages/report';
 import { TeachersPage } from './pages/teachers';
-import { AddTeacherPage } from './pages/teachers/teachers-components/add-teacher-page';
+import { AddTeacherPage } from './pages/add-teacher';
 import { ProfilePage } from './pages/profile';
 import { ReviewsPage } from './pages/reviews';
 
@@ -35,14 +34,14 @@ export function App() {
 						</PrivateRoute>
 					}
 				/>
-				<Route
+				{/* <Route
 					path="/report"
 					element={
 						<PrivateRoute>
 							<ReportPage />
 						</PrivateRoute>
 					}
-				/>
+				/> */}
 				<Route
 					path="/teachers"
 					element={

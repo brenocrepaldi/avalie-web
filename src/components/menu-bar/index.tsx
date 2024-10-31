@@ -1,7 +1,6 @@
 import {
 	Menu,
 	LayoutDashboard,
-	FileText,
 	Users,
 	ArrowLeftIcon,
 	CircleUser,
@@ -37,12 +36,12 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 					icon={<LayoutDashboard />}
 					isMenubarOpen={isMenubarOpen}
 				/>
-				<MenuLink
+				{/* <MenuLink
 					link="/report"
 					text="Relatório"
 					icon={<FileText />}
 					isMenubarOpen={isMenubarOpen}
-				/>
+				/> */}
 				<MenuLink
 					link="/teachers"
 					text="Professores"

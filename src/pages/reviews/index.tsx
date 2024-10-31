@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { PageLayout } from '../../components/page-layout';
 import { SlidersVertical } from 'lucide-react';
-import { reviews } from '../dashboard/dashboard-components/reviews/reviews';
+import { reviews } from '../../utils/lastReviewsUtils';
 import { FilterPanel } from './reviews-components/filter-panel';
 import { ReviewSummary } from './reviews-components/review-summary';
 import { ReviewItem } from './reviews-components/review-item';
