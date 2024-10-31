@@ -7,6 +7,7 @@ import {
 import { EyeIcon, EyeOff } from 'lucide-react';
 
 interface InputProps extends ComponentProps<'input'> {
+	label?: string;
 	icon?: ReactElement<{ className?: string }>;
 	isPassword?: boolean;
 	handlePasswordVisibility?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -20,10 +21,12 @@ export function Input({
 	handlePasswordVisibility,
 	showPassword,
 	fullSize = false,
+	label,
 	...props
 }: InputProps) {
 	return (
 		<div className={`space-y-2 ${fullSize && 'w-full'}`}>
+			{label && <span className="text-zinc-300">{label}</span>}
 			<div className="h-12 px-4 bg-zinc-900 rounded-lg flex items-center gap-2">
 				{icon &&
 					isValidElement(icon) &&
