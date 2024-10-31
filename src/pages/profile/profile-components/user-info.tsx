@@ -1,27 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Pencil } from 'lucide-react';
-import { toast } from 'sonner';
 import { Input } from '../../../components/input';
 import { Button } from '../../../components/button';
 
 interface UserInfoProps {
 	name: string;
 	email: string;
-	onUpdate: (newName: string, newEmail: string) => void;
+	isEditing: boolean;
+	handleEditToggle: () => void;
+	handleUpdateInfo: (newName: string, newEmail: string) => void;
+	handleConfirmationModal: () => void;
+	isChangesConfirmed: boolean;
 }
 
-export function UserInfo({ name, email, onUpdate }: UserInfoProps) {
-	const [isEditing, setIsEditing] = useState(false);
+export function UserInfo({
+	name,
+	email,
+	isEditing,
+	handleEditToggle,
+	handleUpdateInfo,
+	handleConfirmationModal,
+	isChangesConfirmed,
+}: UserInfoProps) {
 	const [editedName, setEditedName] = useState(name);
 	const [editedEmail, setEditedEmail] = useState(email);
 
-	const handleEditToggle = () => setIsEditing((prev) => !prev);
-
-	const handleSubmit = () => {
-		onUpdate(editedName, editedEmail);
-		handleEditToggle();
-		toast.success('Informações alteradas!');
+	const updateInfo = () => {
+		handleConfirmationModal();
 	};
+
+	useEffect(() => {
+		if (isChangesConfirmed) {
+			handleUpdateInfo(editedName, editedEmail);
+			handleEditToggle();
+		}
+	}, [
+		isChangesConfirmed,
+		editedName,
+		editedEmail,
+		handleUpdateInfo,
+		handleEditToggle,
+	]);
 
 	return (
 		<div className="space-y-3">
@@ -59,7 +78,7 @@ export function UserInfo({ name, email, onUpdate }: UserInfoProps) {
 							onChange={(e) => setEditedEmail(e.target.value)}
 						/>
 					</div>
-					<Button type="button" size="full" onClick={handleSubmit}>
+					<Button type="button" size="full" onClick={updateInfo}>
 						Confirmar
 					</Button>
 				</div>
