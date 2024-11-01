@@ -35,7 +35,7 @@ export function LoginPage() {
 
 		handleLogin(email, password).then((data: LoginResponse) => {
 			if (data) {
-				storeTokens(data.accessToken, data.refreshToken, data.expiresIn);
+				storeTokens(data.accessToken, data.access_level, data.refreshToken);
 				navigate('/dashboard');
 			}
 		});

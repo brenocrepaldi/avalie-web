@@ -1,10 +1,11 @@
 import {
-	Menu,
-	LayoutDashboard,
-	Users,
 	ArrowLeftIcon,
 	CircleUser,
+	LayoutDashboard,
+	Menu,
+	Users,
 } from 'lucide-react';
+import { useUserAccessLevel } from '../../services/auth';
 import { MenuLink } from './menu-link';
 
 interface MenuBarProps {
@@ -13,6 +14,8 @@ interface MenuBarProps {
 }
 
 export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
+	const access_level = useUserAccessLevel();
+
 	return (
 		<div
 			className={`bg-zinc-800 h-screen py-5 px-3 flex flex-col overflow-hidden shadow-shape ${
@@ -30,24 +33,29 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 			</button>
 
 			<nav className="w-full space-y-1">
-				<MenuLink
-					link="/dashboard"
-					text="Dashboard"
-					icon={<LayoutDashboard />}
-					isMenubarOpen={isMenubarOpen}
-				/>
+				{access_level === 1 && (
+					<MenuLink
+						link="/dashboard"
+						text="Dashboard"
+						icon={<LayoutDashboard />}
+						isMenubarOpen={isMenubarOpen}
+					/>
+				)}
+
 				{/* <MenuLink
 					link="/report"
 					text="Relatório"
 					icon={<FileText />}
 					isMenubarOpen={isMenubarOpen}
 				/> */}
-				<MenuLink
-					link="/teachers"
-					text="Professores"
-					icon={<Users />}
-					isMenubarOpen={isMenubarOpen}
-				/>
+				{access_level === 2 && (
+					<MenuLink
+						link="/teachers"
+						text="Professores"
+						icon={<Users />}
+						isMenubarOpen={isMenubarOpen}
+					/>
+				)}
 				<MenuLink
 					link="/profile"
 					text="Perfil"

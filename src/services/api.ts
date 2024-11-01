@@ -16,11 +16,9 @@ export async function api(url: string, options: RequestInit = {}) {
 		if (accessToken) {
 			const data = await refreshToken();
 			if (data)
-				storeTokens(data.accessToken, data.refreshToken, data.expiresIn);
+				storeTokens(data.accessToken, data.access_level, data.refreshToken);
 		} else toast.error('Sessão expirada. Faça login novamente.');
 	}
 
 	return response;
 }
-export { storeTokens };
-

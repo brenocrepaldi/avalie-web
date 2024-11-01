@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
+import { useEffect, useState } from 'react';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -25,6 +26,11 @@ export async function handleLogin(email: string, password: string) {
 
 		if (response.ok) {
 			const data = await response.json();
+			if (data.access_level < 1) {
+				toast.error('Usuário não autorizado');
+				return null;
+			}
+
 			return data;
 		} else handleErrorResponse(response);
 	} catch (error) {
@@ -36,12 +42,12 @@ export async function handleLogin(email: string, password: string) {
 export function handleLogout() {
 	if (
 		localStorage.getItem('accessToken') &&
-		localStorage.getItem('refreshToken') &&
-		localStorage.getItem('expiryDate')
+		localStorage.getItem('access_level') &&
+		localStorage.getItem('refreshToken')
 	) {
 		localStorage.removeItem('accessToken');
+		localStorage.removeItem('access_level');
 		localStorage.removeItem('refreshToken');
-		localStorage.removeItem('expiryDate');
 	} else {
 		toast.error('Erro ao sair da conta.');
 	}
@@ -65,11 +71,23 @@ export async function refreshToken() {
 
 export function storeTokens(
 	accessToken: string,
-	refreshToken: string,
-	expiresIn: number
+	access_level: number,
+	refreshToken: string
 ) {
 	localStorage.setItem('accessToken', accessToken);
+	localStorage.setItem('access_level', access_level.toString());
 	localStorage.setItem('refreshToken', refreshToken);
-	const expiryDate = new Date(new Date().getTime() + expiresIn * 1000);
-	localStorage.setItem('expiryDate', expiryDate.toISOString());
+}
+
+export function useUserAccessLevel() {
+	const [accessLevel, setAccessLevel] = useState<number | null>(null);
+
+	useEffect(() => {
+		const accessLevelStr = localStorage.getItem('access_level');
+		if (accessLevelStr) {
+			setAccessLevel(parseInt(accessLevelStr));
+		}
+	}, []);
+
+	return accessLevel;
 }
