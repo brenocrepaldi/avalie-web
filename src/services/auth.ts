@@ -1,7 +1,6 @@
 import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
-import { useEffect, useState } from 'react';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -79,15 +78,39 @@ export function storeTokens(
 	localStorage.setItem('refreshToken', refreshToken);
 }
 
-export function useUserAccessLevel() {
-	const [accessLevel, setAccessLevel] = useState<number | null>(null);
+interface UserData {
+	id: string;
+	name: string;
+	email: string;
+	ra: string;
+	active: boolean;
+	disciplines: string[];
+}
 
-	useEffect(() => {
-		const accessLevelStr = localStorage.getItem('access_level');
-		if (accessLevelStr) {
-			setAccessLevel(parseInt(accessLevelStr));
+export async function getUserData(
+	id: string,
+	accessLevel: number
+): Promise<UserData | null> {
+	const userType = accessLevel === 1 ? 'professor' : 'director';
+
+	try {
+		const response = await api(`${apiUrl}/${userType}/findById?id=${id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			return data as UserData;
+		} else {
+			handleErrorResponse(response);
+			return null;
 		}
-	}, []);
-
-	return accessLevel;
+	} catch (error) {
+		console.error('Error:', error);
+		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+		return null;
+	}
 }

@@ -5,7 +5,7 @@ import {
 	Menu,
 	Users,
 } from 'lucide-react';
-import { useUserAccessLevel } from '../../services/auth';
+import { useUserAccessLevel } from '../../hooks/access-level';
 import { MenuLink } from './menu-link';
 
 interface MenuBarProps {

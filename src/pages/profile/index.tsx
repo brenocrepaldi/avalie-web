@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
-import { PageLayout } from '../../components/page-layout';
-import { UserInfo } from './profile-components/user-info';
-import { PasswordChange } from './profile-components/password-change';
-import { ConfirmationModal } from './profile-components/confirmation-modal';
 import { toast } from 'sonner';
+import { PageLayout } from '../../components/page-layout';
+import { useUserAccessLevel } from '../../hooks/access-level';
+import { useUserId } from '../../hooks/user-id';
+import { getUserData } from '../../services/auth';
+import { ConfirmationModal } from './profile-components/confirmation-modal';
+import { PasswordChange } from './profile-components/password-change';
+import { UserInfo } from './profile-components/user-info';
 
 export function ProfilePage() {
+	const userId = useUserId();
+	const userAccessLevel = useUserAccessLevel();
 	const [name, setName] = useState<string>('Nome do usuário');
 	const [email, setEmail] = useState<string>('E-mail do usuário');
 	const [isEditing, setIsEditing] = useState(false);
@@ -30,6 +35,27 @@ export function ProfilePage() {
 			setIsEditing(false);
 		}
 	}, [isChangesConfirmed]);
+
+	useEffect(() => {
+		if (userId && userAccessLevel !== null) {
+			const fetchUserData = async () => {
+				try {
+					const userData = await getUserData(userId, userAccessLevel);
+
+					if (userData) {
+						setName(userData.name);
+						setEmail(userData.email);
+					}
+
+					console.log('User data:', userData);
+				} catch (error) {
+					console.error('Failed to fetch user data:', error);
+				}
+			};
+
+			fetchUserData();
+		}
+	}, [userId, userAccessLevel]);
 
 	return (
 		<PageLayout title="Perfil">
