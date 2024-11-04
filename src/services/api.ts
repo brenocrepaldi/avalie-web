@@ -1,6 +1,14 @@
 import { getNewAccessToken, storeInCache } from './auth';
 
-export async function api(url: string, options: RequestInit = {}) {
+const apiUrl = import.meta.env.VITE_API_URL;
+
+if (!apiUrl) {
+	throw new Error(
+		'A URL do backend não foi definida. Verifique a variável de ambiente VITE_API_URL.'
+	);
+}
+
+export async function api(path: string, options: RequestInit = {}) {
 	const accessToken = localStorage.getItem('accessToken');
 	if (accessToken) {
 		options.headers = {
@@ -9,7 +17,7 @@ export async function api(url: string, options: RequestInit = {}) {
 		};
 	}
 
-	const response = await fetch(url, options);
+	const response = await fetch(`${apiUrl}${path}`, options);
 
 	if (response.status === 401) {
 		if (accessToken) localStorage.removeItem('accessToken');
@@ -27,6 +35,11 @@ export async function api(url: string, options: RequestInit = {}) {
 			console.log('Token Atualizado');
 			console.log(data.refreshToken);
 		}
+	}
+
+	if (options.method === 'GET') {
+		const data = await response.json();
+		return data;
 	}
 
 	return response;

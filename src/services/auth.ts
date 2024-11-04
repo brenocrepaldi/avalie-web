@@ -2,17 +2,9 @@ import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-if (!apiUrl) {
-	throw new Error(
-		'A URL do backend não foi definida. Verifique a variável de ambiente VITE_API_URL.'
-	);
-}
-
 export async function handleLogin(email: string, password: string) {
 	try {
-		const response = await api(`${apiUrl}/login`, {
+		const response = await api('/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -59,7 +51,7 @@ export async function getNewAccessToken() {
 	}
 
 	try {
-		const response = await api(`${apiUrl}/refresh`, {
+		const response = await api('/refresh', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -108,7 +100,7 @@ export async function getUserData(
 	const userType = accessLevel === 1 ? 'professor' : 'director';
 
 	try {
-		const response = await api(`${apiUrl}/${userType}/findById?id=${id}`, {
+		const response = await api(`/${userType}/findById?id=${id}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
