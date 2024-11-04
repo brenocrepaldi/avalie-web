@@ -28,12 +28,12 @@ export async function api(path: string, options: RequestInit = {}) {
 		if (data) {
 			storeInCache(
 				data.id,
-				data.accessToken,
+				data.AccesToken, // mudar para accessToken
 				data.access_level,
 				data.refreshToken
 			);
-			console.log('Token Atualizado');
-			console.log(data.refreshToken);
+			console.log('accessToken atualizado com sucesso!');
+			window.location.reload(); // revarrega a página para atualizar o token
 		}
 	}
 

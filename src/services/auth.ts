@@ -32,9 +32,11 @@ export async function handleLogin(email: string, password: string) {
 export function handleLogout() {
 	if (
 		localStorage.getItem('accessToken') &&
+		localStorage.getItem('id') &&
 		localStorage.getItem('access_level') &&
 		localStorage.getItem('refreshToken')
 	) {
+		localStorage.removeItem('id');
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('access_level');
 		localStorage.removeItem('refreshToken');
@@ -63,7 +65,6 @@ export async function getNewAccessToken() {
 
 		if (response.ok) {
 			const data = await response.json();
-			console.log('New Access Token Response Data: ', data);
 			return data;
 		} else handleErrorResponse(response);
 	} catch (error) {
@@ -102,19 +103,10 @@ export async function getUserData(
 	try {
 		const response = await api(`/${userType}/findById?id=${id}`, {
 			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
 		});
 
-		if (response.ok) {
-			const data = await response.json();
-			return data as UserData;
-		} else {
-			if (response.status === 401) return null;
-			handleErrorResponse(response);
-			return null;
-		}
+		if (response) return response;
+		else return null;
 	} catch (error) {
 		console.error('Error:', error);
 		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
