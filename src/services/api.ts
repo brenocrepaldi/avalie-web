@@ -1,5 +1,4 @@
-import { toast } from 'sonner';
-import { refreshToken, storeTokens } from './auth';
+import { getNewAccessToken, storeInCache } from './auth';
 
 export async function api(url: string, options: RequestInit = {}) {
 	const accessToken = localStorage.getItem('accessToken');
@@ -13,11 +12,21 @@ export async function api(url: string, options: RequestInit = {}) {
 	const response = await fetch(url, options);
 
 	if (response.status === 401) {
-		if (accessToken) {
-			const data = await refreshToken();
-			if (data)
-				storeTokens(data.accessToken, data.access_level, data.refreshToken);
-		} else toast.error('Sessão expirada. Faça login novamente.');
+		if (accessToken) localStorage.removeItem('accessToken');
+		if (options.headers)
+			delete (options.headers as Record<string, string>)['Authorization'];
+
+		const data = await getNewAccessToken();
+		if (data) {
+			storeInCache(
+				data.id,
+				data.accessToken,
+				data.access_level,
+				data.refreshToken
+			);
+			console.log('Token Atualizado');
+			console.log(data.refreshToken);
+		}
 	}
 
 	return response;

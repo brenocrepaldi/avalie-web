@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import { handleLogin, storeTokens } from '../../services/auth';
+import { handleLogin, storeInCache } from '../../services/auth';
 import { LoginResponse } from '../../services/types';
 import { ForgotPasswordModal } from './login-components/forgot-password-modal';
 import { LoginForm } from './login-components/login-form';
@@ -35,7 +35,12 @@ export function LoginPage() {
 
 		handleLogin(email, password).then((data: LoginResponse) => {
 			if (data) {
-				storeTokens(data.accessToken, data.access_level, data.refreshToken);
+				storeInCache(
+					data.id,
+					data.accessToken,
+					data.access_level,
+					data.refreshToken
+				);
 				navigate('/dashboard');
 			}
 		});

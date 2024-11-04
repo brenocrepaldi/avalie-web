@@ -29,7 +29,6 @@ export async function handleLogin(email: string, password: string) {
 				toast.error('Usuário não autorizado');
 				return null;
 			}
-
 			return data;
 		} else handleErrorResponse(response);
 	} catch (error) {
@@ -52,14 +51,27 @@ export function handleLogout() {
 	}
 }
 
-export async function refreshToken() {
+export async function getNewAccessToken() {
+	const refreshToken = localStorage.getItem('refreshToken');
+	if (!refreshToken) {
+		toast.error('Erro ao recuperar nova autenticação.');
+		return null;
+	}
+
 	try {
 		const response = await api(`${apiUrl}/refresh`, {
 			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				refreshToken,
+			}),
 		});
 
 		if (response.ok) {
 			const data = await response.json();
+			console.log('New Access Token Response Data: ', data);
 			return data;
 		} else handleErrorResponse(response);
 	} catch (error) {
@@ -68,11 +80,13 @@ export async function refreshToken() {
 	}
 }
 
-export function storeTokens(
+export function storeInCache(
+	userId: string,
 	accessToken: string,
 	access_level: number,
 	refreshToken: string
 ) {
+	localStorage.setItem('id', userId);
 	localStorage.setItem('accessToken', accessToken);
 	localStorage.setItem('access_level', access_level.toString());
 	localStorage.setItem('refreshToken', refreshToken);
@@ -105,6 +119,7 @@ export async function getUserData(
 			const data = await response.json();
 			return data as UserData;
 		} else {
+			if (response.status === 401) return null;
 			handleErrorResponse(response);
 			return null;
 		}

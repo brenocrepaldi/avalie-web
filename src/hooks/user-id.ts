@@ -4,7 +4,7 @@ export function useUserId() {
 	const [accessLevel, setAccessLevel] = useState<string | null>(null);
 
 	useEffect(() => {
-		const accessLevel = localStorage.getItem('_id');
+		const accessLevel = localStorage.getItem('id');
 		if (accessLevel) {
 			setAccessLevel(accessLevel);
 		}
