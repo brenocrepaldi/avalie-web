@@ -28,7 +28,7 @@ export async function api(path: string, options: RequestInit = {}) {
 		if (data) {
 			storeInCache(
 				data.id,
-				data.AccesToken, // mudar para accessToken
+				data.accessToken, 
 				data.access_level,
 				data.refreshToken
 			);

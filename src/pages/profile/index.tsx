@@ -1,74 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { PageLayout } from '../../components/page-layout';
-import { useUserAccessLevel } from '../../hooks/access-level';
-import { useUserId } from '../../hooks/user-id';
-import { getUserData } from '../../services/auth';
+import { UserData, useUserData } from '../../hooks/useUserData';
 import { ConfirmationModal } from './profile-components/confirmation-modal';
 import { PasswordChange } from './profile-components/password-change';
 import { UserInfo } from './profile-components/user-info';
 
 export function ProfilePage() {
-	const userId = useUserId();
-	const userAccessLevel = useUserAccessLevel();
-	const [name, setName] = useState<string>('Nome do usuário');
-	const [email, setEmail] = useState<string>('E-mail do usuário');
+	const { userData, updateUserData } = useUserData();
 	const [isEditing, setIsEditing] = useState(false);
-	const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
-		useState<boolean>(false);
-	const [isChangesConfirmed, setIsChangesConfirmed] = useState<boolean>(false);
+	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+	const [updatedData, setUpdatedData] = useState<Partial<UserData> | null>(
+		null
+	);
 
-	const handleEditToggle = () => setIsEditing((prev) => !prev);
-
-	const handleConfirmationModal = () =>
+	const toggleEdit = () => setIsEditing((prev) => !prev);
+	const toggleConfirmationModal = () =>
 		setIsConfirmationModalOpen((prev) => !prev);
 
-	const handleUpdateInfo = (newName: string, newEmail: string) => {
-		setName(newName);
-		setEmail(newEmail);
-		toast.success('Informações alteradas!');
-	};
+	const handleUpdateUserData = () => {
+		if (updatedData) {
+			updateUserData(updatedData);
 
-	useEffect(() => {
-		if (isChangesConfirmed) {
-			setIsChangesConfirmed(false);
+			console.log('Dados atualizados do usuário:', updatedData);
+			// atualizar os dados no backend
+
+			toast.success('Dados do usuário atualizados com sucesso!');
 			setIsEditing(false);
+			setUpdatedData(null);
 		}
-	}, [isChangesConfirmed]);
-
-	useEffect(() => {
-		if (userId && userAccessLevel !== null) {
-			const fetchUserData = async () => {
-				try {
-					const userData = await getUserData(userId, userAccessLevel);
-
-					if (userData) {
-						setName(userData.name);
-						setEmail(userData.email);
-					}
-
-					console.log('User data:', userData);
-				} catch (error) {
-					console.error('Failed to fetch user data:', error);
-				}
-			};
-
-			fetchUserData();
-		}
-	}, [userId, userAccessLevel]);
+	};
 
 	return (
 		<PageLayout title="Perfil">
 			<div className="bg-zinc-800 p-6 pb-8 pt-2 rounded-lg shadow-shape text-zinc-300 flex-grow">
-				<div className="w-1/4 py-6 px-3 rounded-md flex flex-col space-y-6">
+				<div className="w-1/3 py-6 px-3 rounded-md flex flex-col space-y-6">
 					<UserInfo
-						name={name}
-						email={email}
+						userData={userData}
 						isEditing={isEditing}
-						handleEditToggle={handleEditToggle}
-						handleUpdateInfo={handleUpdateInfo}
-						handleConfirmationModal={handleConfirmationModal}
-						isChangesConfirmed={isChangesConfirmed}
+						toggleEdit={toggleEdit}
+						setUpdatedData={setUpdatedData} // Atualiza o estado com os dados
+						toggleConfirmationModal={toggleConfirmationModal} // Abre o modal
 					/>
 					<div className="h-[1px] rounded-lg bg-zinc-700" />
 					<PasswordChange />
@@ -77,8 +49,8 @@ export function ProfilePage() {
 
 			{isConfirmationModalOpen && (
 				<ConfirmationModal
-					setIsChangesConfirmed={setIsChangesConfirmed}
-					handleConfirmationModal={handleConfirmationModal}
+					confirm={handleUpdateUserData}
+					toggleModal={toggleConfirmationModal}
 				/>
 			)}
 		</PageLayout>

@@ -1,13 +1,13 @@
 import { Button } from '../../../components/button';
 
 interface ConfirmationModalProps {
-	setIsChangesConfirmed: React.Dispatch<React.SetStateAction<boolean>>;
-	handleConfirmationModal: () => void;
+	confirm: () => void;
+	toggleModal: () => void;
 }
 
 export function ConfirmationModal({
-	setIsChangesConfirmed,
-	handleConfirmationModal,
+	confirm,
+	toggleModal,
 }: ConfirmationModalProps) {
 	return (
 		<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -21,18 +21,13 @@ export function ConfirmationModal({
 					</p>
 				</div>
 				<div className="flex justify-end gap-2">
-					<Button
-						variant="secondary"
-						onClick={() => {
-							handleConfirmationModal();
-						}}
-					>
+					<Button variant="secondary" onClick={toggleModal}>
 						Cancelar
 					</Button>
 					<Button
 						onClick={() => {
-							setIsChangesConfirmed(true);
-							handleConfirmationModal();
+							confirm();
+							toggleModal();
 						}}
 					>
 						Confirmar

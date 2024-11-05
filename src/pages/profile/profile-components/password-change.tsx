@@ -46,9 +46,18 @@ export function PasswordChange() {
 							required
 						/>
 					</div>
-					<Button type="button" size="full" onClick={handleSubmit}>
-						Confirmar
-					</Button>
+					<div className="flex justify-end gap-2">
+						<Button
+							type="button"
+							variant="secondary"
+							onClick={handleEditToggle}
+						>
+							Cancelar
+						</Button>
+						<Button type="button" onClick={handleSubmit}>
+							Confirmar
+						</Button>
+					</div>
 				</div>
 			)}
 		</div>

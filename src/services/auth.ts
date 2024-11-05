@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
+import { UserData } from '../hooks/useUserData';
 
 export async function handleLogin(email: string, password: string) {
 	try {
@@ -83,15 +84,6 @@ export function storeInCache(
 	localStorage.setItem('accessToken', accessToken);
 	localStorage.setItem('access_level', access_level.toString());
 	localStorage.setItem('refreshToken', refreshToken);
-}
-
-interface UserData {
-	id: string;
-	name: string;
-	email: string;
-	ra: string;
-	active: boolean;
-	disciplines: string[];
 }
 
 export async function getUserData(
