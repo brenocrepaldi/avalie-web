@@ -3,6 +3,25 @@ import { getUserData } from '../services/auth';
 import { useUserId } from './user-id';
 import { useUserAccessLevel } from './access-level';
 
+export interface SelectedDiscipline {
+	id: string;
+	name: string;
+}
+
+export type Disciple = {
+	id: string;
+	active: boolean;
+	days_week: string[];
+	end_time: string;
+	name: string;
+	start_time: string;
+};
+
+export type Course = {
+	id: string;
+	name: string;
+};
+
 export type UserData = {
 	id: string;
 	ra: string;
@@ -27,8 +46,8 @@ export function useUserData() {
 		active: false,
 		...(userAccessLevel === 1
 			? { disciplines: ['Disciplina 1', 'Disciplina 2'] }
-			: null),
-		...(userAccessLevel === 2 ? { course: 'Nome do curso' } : null),
+			: {}),
+		...(userAccessLevel === 2 ? { course: 'Nome do curso' } : {}),
 	});
 
 	useEffect(() => {

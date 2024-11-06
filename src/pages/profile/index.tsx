@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { PageLayout } from '../../components/page-layout';
+import { useUserAccessLevel } from '../../hooks/access-level';
+import { useUserId } from '../../hooks/user-id';
 import { UserData, useUserData } from '../../hooks/useUserData';
+import { apiUpdateUserData } from '../../services/auth';
 import { ConfirmationModal } from './profile-components/confirmation-modal';
 import { PasswordChange } from './profile-components/password-change';
 import { UserInfo } from './profile-components/user-info';
 
 export function ProfilePage() {
+	const userId = useUserId();
+	const userAccessLevel = useUserAccessLevel();
 	const { userData, updateUserData } = useUserData();
 	const [isEditing, setIsEditing] = useState(false);
 	const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -24,6 +29,9 @@ export function ProfilePage() {
 
 			console.log('Dados atualizados do usuário:', updatedData);
 			// atualizar os dados no backend
+
+			if (userId && userAccessLevel !== null)
+				apiUpdateUserData(userId, userAccessLevel, updatedData);
 
 			toast.success('Dados do usuário atualizados com sucesso!');
 			setIsEditing(false);

@@ -105,3 +105,32 @@ export async function getUserData(
 		return null;
 	}
 }
+
+export async function apiUpdateUserData(
+	id: string,
+	accessLevel: number,
+	updatedData: Partial<UserData>
+) {
+	const userType = accessLevel === 1 ? 'professor' : 'director';
+	try {
+		const response = await api(`/${userType}/updateById?id=${id}`, {
+			method: 'POST',
+			body: JSON.stringify({
+				updatedData,
+			}),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			console.log('DATAAAAAAAAAAAAAAAAAA:', data);
+			if (data.access_level < 1) {
+				toast.error('Usuário não autorizado');
+				return null;
+			}
+			return data;
+		} else handleErrorResponse(response);
+	} catch (error) {
+		console.error('Error:', error);
+		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+	}
+}
