@@ -8,6 +8,7 @@ import homeLogo from '../../assets/home-logo.png';
 import { Button } from '../button';
 import { DatePickerModal } from './header-components/date-picker-modal';
 import { LogOutModal } from './header-components/log-out-modal';
+import { useUserAccessLevel } from '../../hooks/access-level';
 
 interface HeaderProps {
 	title: string;
@@ -21,6 +22,7 @@ export function Header({
 	hasCalendar = false,
 }: HeaderProps) {
 	const navigate = useNavigate();
+	const userAccessLevel = useUserAccessLevel();
 	const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 	const [dateRange, setDateRange] = useState<DateRange | undefined>({
@@ -50,15 +52,21 @@ export function Header({
 				)}`
 			: null;
 
-	function goHome() {
-		navigate('/');
+	function goBack() {
+		const pathName = window.location.pathname;
+
+		if (pathName === '/dashboard' || pathName === '/teachers') {
+			userAccessLevel === 1 ? navigate('/dashboard') : navigate('/teachers');
+		} else {
+			navigate(-1);
+		}
 	}
 
 	return (
 		<div className="flex gap-3">
 			<div
 				className="bg-zinc-800 hover:bg-zinc-700 p-2 rounded-lg shadow-shape flex justify-between items-center cursor-pointer  transition duration-100"
-				onClick={goHome}
+				onClick={goBack}
 			>
 				<img
 					src={homeLogo}
