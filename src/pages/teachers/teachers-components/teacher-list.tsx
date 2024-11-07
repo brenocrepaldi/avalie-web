@@ -48,8 +48,6 @@ export function TeacherList({
 			});
 	}, []);
 
-	console.log(teacherList);
-
 	return (
 		<div className="space-y-6">
 			<h2 className="text-2xl">Lista de Professores</h2>
@@ -57,7 +55,7 @@ export function TeacherList({
 				{teacherList &&
 					filteredTeachers.map((teacher: TeacherDataProps, index: number) => (
 						<div
-							key={teacherList[index].id}
+							key={teacher.id}
 							className={`p-4 bg-zinc-700 rounded-lg transition-all duration-100 ease-in-out space-y-6 ${
 								!expandedTeachers[teacher.id] &&
 								'hover:bg-zinc-600 cursor-pointer'
@@ -79,7 +77,6 @@ export function TeacherList({
 									className="transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-6 mt-6 p-6 bg-zinc-800 rounded-lg shadow-md"
 									onClick={(e) => e.stopPropagation()}
 								>
-									{/* Conteúdo expandido */}
 									<div className="border-zinc-600 flex gap-2 items-baseline">
 										<span className="text-lg font-semibold text-zinc-100">
 											Disciplina:

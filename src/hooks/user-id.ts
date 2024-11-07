@@ -1,14 +1,6 @@
-import { useEffect, useState } from 'react';
-
 export function useUserId() {
-	const [accessLevel, setAccessLevel] = useState<string | null>(null);
+	const accessLevel = localStorage.getItem('id');
 
-	useEffect(() => {
-		const accessLevel = localStorage.getItem('id');
-		if (accessLevel) {
-			setAccessLevel(accessLevel);
-		}
-	}, []);
-
-	return accessLevel;
+	if (accessLevel) return accessLevel;
+	else return 0;
 }

@@ -14,7 +14,7 @@ interface MenuBarProps {
 }
 
 export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
-	const access_level = useUserAccessLevel();
+	const userAccessLevel = useUserAccessLevel();
 
 	return (
 		<div
@@ -33,7 +33,7 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 			</button>
 
 			<nav className="w-full space-y-1">
-				{access_level === 1 && (
+				{userAccessLevel === 1 && (
 					<MenuLink
 						link="/dashboard"
 						text="Dashboard"
@@ -48,7 +48,7 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 					icon={<FileText />}
 					isMenubarOpen={isMenubarOpen}
 				/> */}
-				{access_level === 2 && (
+				{userAccessLevel === 2 && (
 					<MenuLink
 						link="/teachers"
 						text="Professores"

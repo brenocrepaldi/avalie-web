@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import { handleLogin, storeInCache } from '../../services/auth';
@@ -13,13 +13,6 @@ export function LoginPage() {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [showPassword, setShowPassword] = useState(false);
-
-	useEffect(() => {
-		const token = localStorage.getItem('accessToken');
-		if (token) {
-			navigate('/dashboard');
-		}
-	}, [navigate]);
 
 	const handleForgotPasswordModal = () => {
 		setIsForgotPasswordModalOpen(!isForgotPasswordModalOpen);
@@ -41,7 +34,9 @@ export function LoginPage() {
 					data.access_level,
 					data.refreshToken
 				);
-				navigate('/dashboard');
+				data.access_level === 1
+					? navigate('/dashboard')
+					: navigate('/teachers');
 			}
 		});
 	}

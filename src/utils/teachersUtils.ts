@@ -82,23 +82,4 @@ export const teachersData = [
 			},
 		],
 	},
-	{
-		id: 3,
-		nome: 'Pedro Souza',
-		disciplina: 'Sistemas Operacionais',
-		turmas: ['0103', '0104'],
-		mediaAvaliacao: 3.95,
-		avaliacoes: [
-			{
-				data: '12/10/2024',
-				nota: 4.0,
-				comentario: 'Bom, mas o conteúdo é denso.',
-			},
-			{
-				data: '16/10/2024',
-				nota: 3.9,
-				comentario: 'Precisa melhorar o ritmo das aulas.',
-			},
-		],
-	},
 ];

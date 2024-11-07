@@ -1,12 +1,21 @@
-import { ReactNode } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useUserAccessLevel } from '../hooks/access-level';
 
 interface PrivateRouteProps {
-	children: ReactNode;
+	children: React.ReactNode;
+	requiredLevel?: number;
 }
 
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
-	const isAuthenticated = !!localStorage.getItem('accessToken');
+export function PrivateRoute({ children, requiredLevel }: PrivateRouteProps) {
+	const userAccessLevel = useUserAccessLevel();
 
-	return isAuthenticated ? children : <Navigate to="/login" />;
-};
+	if (
+		!userAccessLevel ||
+		(requiredLevel && userAccessLevel !== requiredLevel)
+	) {
+		return <Navigate to="/not-found" />;
+	}
+
+	return <>{children}</>;
+}
