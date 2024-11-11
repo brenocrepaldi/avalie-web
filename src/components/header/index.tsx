@@ -9,6 +9,7 @@ import { Button } from '../button';
 import { DatePickerModal } from './header-components/date-picker-modal';
 import { LogOutModal } from './header-components/log-out-modal';
 import { useUserAccessLevel } from '../../hooks/useUserAccessLevel';
+import { useUserData } from '../../hooks/useUserData';
 
 interface HeaderProps {
 	title: string;
@@ -22,6 +23,7 @@ export function Header({
 	hasCalendar = false,
 }: HeaderProps) {
 	const navigate = useNavigate();
+	const userData = useUserData();
 	const userAccessLevel = useUserAccessLevel();
 	const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 	const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -86,6 +88,14 @@ export function Header({
 							{displayedDate || 'Selecione o período'}
 						</span>
 					</button>
+				)}
+				{userData && window.location.pathname === '/dashboard' && (
+					<div className="text-zinc-500 flex gap-2 items-baseline ml-[-150px]">
+						Olá, Professor
+						<span className="text-zinc-300 font-bold text-xl">
+							{userData.name}
+						</span>
+					</div>
 				)}
 				<Button type="button" variant="secondary" onClick={handleLogOutModal}>
 					<LogOut />
