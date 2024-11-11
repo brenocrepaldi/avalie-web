@@ -84,11 +84,13 @@ export const getGradesOption = (
 					show: true,
 					color: '#ffffff',
 					fontFamily: 'Inter, sans-serif',
+					formatter: (params: { value: number }) =>
+						params.value > 0 ? `${params.value}` : '',
 				},
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.positiveRatings),
+				data: disciplineRatingsInfo?.map((item) => item.positiveRatings || 0), // Valor mínimo para exibir
 				itemStyle: {
 					color: '#3b82f6',
 					borderRadius: [0, 7, 7, 0],
@@ -102,11 +104,13 @@ export const getGradesOption = (
 					show: true,
 					color: '#ffffff',
 					fontFamily: 'Inter, sans-serif',
+					formatter: (params: { value: number }) =>
+						params.value > 0 ? `${params.value}` : '',
 				},
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.neutralRatings),
+				data: disciplineRatingsInfo?.map((item) => item.neutralRatings || 0),
 				itemStyle: {
 					color: '#71717a',
 					borderRadius: [7, 7, 7, 7],
@@ -120,11 +124,13 @@ export const getGradesOption = (
 					show: true,
 					color: '#ffffff',
 					fontFamily: 'Inter, sans-serif',
+					formatter: (params: { value: number }) =>
+						params.value > 0 ? `${params.value}` : '',
 				},
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.negativeRatings),
+				data: disciplineRatingsInfo?.map((item) => item.negativeRatings || 0),
 				itemStyle: {
 					color: '#ef4444',
 					borderRadius: [7, 7, 7, 7],
