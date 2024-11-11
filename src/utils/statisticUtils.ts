@@ -1,3 +1,5 @@
+import { DisciplineRating } from '../hooks/useRatings';
+
 export const getFeedbackOption = (
 	positives: number,
 	neutral: number,
@@ -50,7 +52,9 @@ export const getFeedbackOption = (
 	};
 };
 
-export const getGradesOption = () => {
+export const getGradesOption = (
+	disciplineRatingsInfo: DisciplineRating[] | undefined
+) => {
 	return {
 		tooltip: {
 			trigger: 'axis',
@@ -69,7 +73,7 @@ export const getGradesOption = () => {
 		},
 		yAxis: {
 			type: 'category',
-			data: ['Turma 1', 'Turma 2', 'Turma 3'],
+			data: disciplineRatingsInfo?.map((item) => item.disciplineName),
 		},
 		series: [
 			{
@@ -84,7 +88,7 @@ export const getGradesOption = () => {
 				emphasis: {
 					focus: 'series',
 				},
-				data: [30, 34, 43],
+				data: disciplineRatingsInfo?.map((item) => item.positiveRatings),
 				itemStyle: {
 					color: '#3b82f6',
 					borderRadius: [0, 7, 7, 0],
@@ -102,7 +106,7 @@ export const getGradesOption = () => {
 				emphasis: {
 					focus: 'series',
 				},
-				data: [12, 13, 10],
+				data: disciplineRatingsInfo?.map((item) => item.neutralRatings),
 				itemStyle: {
 					color: '#71717a',
 					borderRadius: [7, 7, 7, 7],
@@ -120,7 +124,7 @@ export const getGradesOption = () => {
 				emphasis: {
 					focus: 'series',
 				},
-				data: [7, 9, 4],
+				data: disciplineRatingsInfo?.map((item) => item.negativeRatings),
 				itemStyle: {
 					color: '#ef4444',
 					borderRadius: [7, 7, 7, 7],

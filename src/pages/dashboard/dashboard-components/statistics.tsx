@@ -1,6 +1,10 @@
 import ReactECharts from 'echarts-for-react';
 import { useEffect, useState } from 'react';
-import { getProfessorRatingInfo } from '../../../hooks/useRatings';
+import {
+	DisciplineRating,
+	getProfessorDisciplineRatingInfo,
+	getProfessorRatingInfo,
+} from '../../../hooks/useRatings';
 import { useUserData } from '../../../hooks/useUserData';
 import { renderStars } from '../../../utils/reviewUtils';
 import {
@@ -17,27 +21,39 @@ export function Statistics() {
 	}>();
 	const [totalRating, setTotalRatings] = useState<number>();
 	const [meanRating, setMeanRating] = useState<number>(0);
+	const [disciplineRatingsInfo, setDisciplineRatingsInfo] =
+		useState<DisciplineRating[]>();
 
 	useEffect(() => {
 		async function fetchMeanRating() {
 			if (userData) {
 				const ratingInfo = await getProfessorRatingInfo(userData.id);
-				setMeanRating(ratingInfo.meanRating);
-				setRatingCategories({
-					positives: ratingInfo.positiveRatings,
-					neutral: ratingInfo.neutralRatings,
-					negatives: ratingInfo.negativeRatings,
-				});
-				setTotalRatings(ratingInfo.totalRatings);
+				if (ratingInfo) {
+					setMeanRating(ratingInfo.meanRating);
+					setRatingCategories({
+						positives: ratingInfo.positiveRatings,
+						neutral: ratingInfo.neutralRatings,
+						negatives: ratingInfo.negativeRatings,
+					});
+					setTotalRatings(ratingInfo.totalRatings);
+				}
+			}
+		}
+		async function fetchDisciplinesRatings() {
+			if (userData) {
+				const disciplineRatings = await getProfessorDisciplineRatingInfo(
+					userData.id
+				);
+				if (disciplineRatings) setDisciplineRatingsInfo(disciplineRatings);
 			}
 		}
 		fetchMeanRating();
+		fetchDisciplinesRatings();
 	}, [userData]);
 
 	return (
 		<div className="bg-zinc-800 p-6 rounded-lg shadow-lg text-zinc-300 flex flex-col">
 			<h2 className="text-2xl mb-4">Estatísticas de Avaliações</h2>
-
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="bg-zinc-700 p-4 pt-8 rounded-md flex flex-col">
 					<div className="space-y-6">
@@ -72,9 +88,11 @@ export function Statistics() {
 
 				<div className="bg-zinc-700 p-4 pt-8 rounded-md flex flex-col">
 					<div className="text-center font-medium text-xl text-zinc-200 mb-4">
-						Avaliações por turma
+						Avaliações por disciplina
 					</div>
-					<ReactECharts option={getGradesOption()} />
+					{userData && disciplineRatingsInfo && (
+						<ReactECharts option={getGradesOption(disciplineRatingsInfo)} />
+					)}
 				</div>
 			</div>
 		</div>
