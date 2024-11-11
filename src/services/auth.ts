@@ -1,7 +1,6 @@
 import { toast } from 'sonner';
 import { api } from './api';
 import { handleErrorResponse } from './error';
-import { UserData } from '../hooks/useUserData';
 
 export async function handleLogin(email: string, password: string) {
 	try {
@@ -86,51 +85,31 @@ export function storeInCache(
 	localStorage.setItem('refreshToken', refreshToken);
 }
 
-export async function getUserData(
-	id: string,
-	accessLevel: number
-): Promise<UserData | null> {
-	const userType = accessLevel === 1 ? 'professor' : 'director';
+export type NewUserData = {
+	id?: string;
+	ra: string;
+	name: string;
+	email: string;
+	disciplines?: string[];
+	course?: string;
+};
+
+export async function updateUserData(userId: string, newUserData: NewUserData) {
+	const userType = newUserData.disciplines ? 'professor' : 'director';
 
 	try {
-		const response = await api(`/${userType}/findById?id=${id}`, {
-			method: 'GET',
+		const response = await api(`/${userType}/updateById?id=${userId}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(newUserData),
 		});
 
-		if (response) return response;
-		else return null;
+		if (response.ok) return true;
 	} catch (error) {
 		console.error('Error:', error);
 		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
 		return null;
-	}
-}
-
-export async function apiUpdateUserData(
-	id: string,
-	accessLevel: number,
-	updatedData: Partial<UserData>
-) {
-	const userType = accessLevel === 1 ? 'professor' : 'director';
-	try {
-		const response = await api(`/${userType}/updateById?id=${id}`, {
-			method: 'POST',
-			body: JSON.stringify({
-				updatedData,
-			}),
-		});
-
-		if (response.ok) {
-			const data = await response.json();
-			console.log('DATAAAAAAAAAAAAAAAAAA:', data);
-			if (data.access_level < 1) {
-				toast.error('Usuário não autorizado');
-				return null;
-			}
-			return data;
-		} else handleErrorResponse(response);
-	} catch (error) {
-		console.error('Error:', error);
-		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
 	}
 }

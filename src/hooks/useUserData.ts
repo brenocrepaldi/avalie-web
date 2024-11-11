@@ -1,26 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getUserData } from '../services/auth';
 import { useUserId } from './user-id';
 import { useUserAccessLevel } from './access-level';
-
-export interface SelectedDiscipline {
-	id: string;
-	name: string;
-}
-
-export type Disciple = {
-	id: string;
-	active: boolean;
-	days_week: string[];
-	end_time: string;
-	name: string;
-	start_time: string;
-};
-
-export type Course = {
-	id: string;
-	name: string;
-};
+import { api } from '../services/api';
+import { toast } from 'sonner';
 
 export type UserData = {
 	id: string;
@@ -28,51 +10,36 @@ export type UserData = {
 	name: string;
 	email: string;
 	password: string;
-	disciplines?: string[]; // opcional para professores
-	course?: string; // opcional para diretores
+	disciplines?: string[];
+	course?: string;
 	active: boolean;
 };
 
 export function useUserData() {
 	const userId = useUserId();
 	const userAccessLevel = useUserAccessLevel();
-
-	const [userData, setUserData] = useState<UserData>({
-		id: 'ID do usuário',
-		ra: 'RA do usuário',
-		name: 'Nome do usuário',
-		email: 'E-mail do usuário',
-		password: 'Senha do usuário',
-		active: false,
-		...(userAccessLevel === 1
-			? { disciplines: ['Disciplina 1', 'Disciplina 2'] }
-			: {}),
-		...(userAccessLevel === 2 ? { course: 'Nome do curso' } : {}),
-	});
+	const [userData, setUserData] = useState<UserData>();
 
 	useEffect(() => {
+		const userType = userAccessLevel === 1 ? 'professor' : 'director';
 		if (userId && userAccessLevel !== null) {
 			(async () => {
 				try {
-					const fetchedData = await getUserData(userId, userAccessLevel);
-					if (fetchedData) {
-						setUserData({
-							...fetchedData,
-							disciplines:
-								userAccessLevel === 1 ? fetchedData.disciplines : undefined,
-							course: userAccessLevel === 2 ? fetchedData.course : undefined,
-						});
-					}
+					const data = await api(`/${userType}/findById?id=${userId}`, {
+						method: 'GET',
+					});
+
+					if (data) return setUserData(data);
 				} catch (error) {
-					console.error('Falha ao buscar dados do usuário:', error);
+					console.error('Error:', error);
+					toast.error(
+						'Erro ao conectar com o servidor. Verifique sua conexão.'
+					);
+					return null;
 				}
 			})();
 		}
 	}, [userId, userAccessLevel]);
 
-	const updateUserData = (data: Partial<UserData>) => {
-		setUserData((prevData) => ({ ...prevData, ...data }));
-	};
-
-	return { userData, updateUserData };
+	return userData;
 }

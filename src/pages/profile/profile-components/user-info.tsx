@@ -1,131 +1,94 @@
 import { Check, Pencil } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
 import { useUserAccessLevel } from '../../../hooks/access-level';
+import { UserData, useUserData } from '../../../hooks/useUserData';
 import {
-	Course,
-	Disciple,
-	SelectedDiscipline,
-	UserData,
-} from '../../../hooks/useUserData';
-import { api } from '../../../services/api';
+	Discipline,
+	getDisciplineId,
+	useDisciplines,
+} from '../../../hooks/useDisciplines';
+import { useEffect, useState } from 'react';
+import { useCourses } from '../../../hooks/useCourses';
+import { NewUserData } from '../../../services/auth';
 
 interface UserInfoProps {
-	userData: UserData;
 	isEditing: boolean;
 	toggleEdit: () => void;
-	setUpdatedData: (data: Partial<UserData>) => void;
-	toggleConfirmationModal: () => void;
+	toggleConfirmationModal: (userData: NewUserData) => void;
 }
 
 export function UserInfo({
-	userData,
 	isEditing,
 	toggleEdit,
-	setUpdatedData,
 	toggleConfirmationModal,
 }: UserInfoProps) {
 	const userAccessLevel = useUserAccessLevel();
-	const [formData, setFormData] = useState<UserData>(userData);
-	const [selectedDisciplines, setSelectedDisciplines] = useState<
-		SelectedDiscipline[]
-	>([]);
-	const [disciplines, setDisciplines] = useState<Disciple[]>([]);
-	const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
-		userData.course
-	);
-	const [courses, setCourses] = useState<Course[]>([]);
+	const userData = useUserData();
+	const disciplines = useDisciplines();
+	const courses = useCourses();
+
+	const [userFormData, setUserFormData] = useState<UserData | undefined>();
 
 	useEffect(() => {
-		if (userAccessLevel === 1) {
-			(async () => {
-				try {
-					const fetchedDisciplines = await api('/disciplines/findAll', {
-						method: 'GET',
-					});
-					if (fetchedDisciplines) setDisciplines(fetchedDisciplines);
-				} catch (error) {
-					console.error('Falha ao buscar dados do usuário:', error);
-				}
-			})();
+		if (userData) {
+			setUserFormData(userData);
 		}
+	}, [userData]);
 
-		if (userAccessLevel === 2) {
-			(async () => {
-				try {
-					const fetchedCourses = await api('/course/findAll', {
-						method: 'GET',
-					});
-					if (fetchedCourses) setCourses(fetchedCourses);
-				} catch (error) {
-					console.error('Falha ao buscar cursos:', error);
-				}
-			})();
-		}
-	}, [userAccessLevel]);
-
-	useEffect(() => {
-		setFormData(userData);
-		setSelectedCourse(userData.course);
-		// Verifica se userData.disciplines é um array de strings e transforma em SelectedDiscipline[]
-		const initialSelectedDisciplines = userData.disciplines
-			?.map((disciplineName) => {
-				const discipline = disciplines.find((d) => d.name === disciplineName);
-				return discipline ? { id: discipline.id, name: discipline.name } : null;
-			})
-			.filter(Boolean) as SelectedDiscipline[]; // Filtra qualquer null e faz o cast para SelectedDiscipline[]
-
-		setSelectedDisciplines(initialSelectedDisciplines || []); // Inicia com disciplinas do usuário
-	}, [userData, disciplines]);
-
-	const handleChange = (
+	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
 		const { name, value } = e.target;
-		const checked =
-			(e.target as HTMLInputElement).type === 'checkbox'
-				? (e.target as HTMLInputElement).checked
-				: undefined;
-
-		setFormData((prevData) => ({
-			...prevData,
-			[name]: checked !== undefined ? checked : value,
+		setUserFormData((prevData) => ({
+			...(prevData as UserData),
+			[name]: value,
 		}));
-
-		if (name === 'course') {
-			setSelectedCourse(value);
-		}
 	};
 
-	const handleSave = () => {
-		const filteredData = Object.fromEntries(
-			Object.entries({
-				...formData,
-				disciplines:
-					userAccessLevel === 1
-						? selectedDisciplines.map((d) => d.id)
-						: undefined,
-				course: userAccessLevel === 2 ? selectedCourse : undefined,
-				active: undefined,
-				id: undefined,
-			}).filter(([, value]) => value !== undefined)
-		);
+	const handleToggleDiscipline = (discipline: Discipline) => {
+		setUserFormData((prevData) => {
+			const currentDisciplines = prevData?.disciplines || [];
+			const updatedDisciplines = currentDisciplines.includes(discipline.name)
+				? currentDisciplines.filter((d) => d !== discipline.name)
+				: [...currentDisciplines, discipline.name];
 
-		setUpdatedData(filteredData);
-		toggleConfirmationModal();
-	};
-
-	const handleToggleDiscipline = (discipline: Disciple) => {
-		setSelectedDisciplines((prev) => {
-			if (prev.some((d) => d.id === discipline.id)) {
-				// Remove disciplina se já estiver selecionada
-				return prev.filter((d) => d.id !== discipline.id);
-			} else {
-				// Adiciona disciplina se não estiver selecionada
-				return [...prev, { id: discipline.id, name: discipline.name }];
-			}
+			return {
+				...(prevData as UserData),
+				disciplines: updatedDisciplines,
+			};
 		});
+	};
+
+	const handleCancel = () => {
+		setUserFormData(userData);
+		toggleEdit();
+	};
+
+	const handleSave = async () => {
+		if (!userFormData) return;
+
+		if (userAccessLevel === 1) {
+			const disciplinesId = await getDisciplineId(userFormData);
+			userFormData.disciplines = disciplinesId;
+		}
+
+		const newUserData =
+			userAccessLevel === 1
+				? {
+						ra: userFormData.ra,
+						name: userFormData.name,
+						email: userFormData.email,
+						disciplines: userFormData.disciplines,
+					}
+				: {
+						ra: userFormData.ra,
+						name: userFormData.name,
+						email: userFormData.email,
+						course: userFormData.course,
+					};
+
+		toggleConfirmationModal({ id: userFormData.id, ...newUserData });
 	};
 
 	return (
@@ -138,7 +101,9 @@ export function UserInfo({
 							{userAccessLevel === 1 ? 'Professor' : 'Diretor'}
 						</p>
 						<div className="flex items-center justify-between mt-4">
-							<h2 className="text-3xl font-bold text-white">{userData.name}</h2>
+							<h2 className="text-3xl font-bold text-white">
+								{userData?.name}
+							</h2>
 							<button
 								className="text-gray-400 hover:text-white transition duration-200 ease-in-out transform hover:scale-105"
 								onClick={toggleEdit}
@@ -146,7 +111,7 @@ export function UserInfo({
 								<Pencil size={22} />
 							</button>
 						</div>
-						<p className="text-sm text-gray-400">{userData.email}</p>
+						<p className="text-sm text-gray-400">{userData?.email}</p>
 					</div>
 					<div className="h-[1px] rounded-lg bg-zinc-700 my-4" />
 					<div className="mt-6 space-y-2">
@@ -156,18 +121,18 @@ export function UserInfo({
 						<ul className="list-inside text-gray-400 pl-2 space-y-2 list-none">
 							<li>
 								RA:{' '}
-								<span className="font-medium text-white">{userData.ra}</span>
+								<span className="font-medium text-white">{userData?.ra}</span>
 							</li>
 							{userAccessLevel === 2 && (
 								<li>
 									Curso:{' '}
 									<span className="font-medium text-white">
-										{userData.course || 'Não especificado'}
+										{userData?.course}
 									</span>
 								</li>
 							)}
 							{userAccessLevel === 1 &&
-								userData.disciplines &&
+								userData?.disciplines &&
 								userData.disciplines.length > 0 && (
 									<li>
 										Disciplinas:{' '}
@@ -194,8 +159,8 @@ export function UserInfo({
 							type="text"
 							id="name"
 							name="name"
-							value={formData.name}
-							onChange={handleChange}
+							value={userFormData?.name}
+							onChange={handleInputChange}
 							placeholder="Insira o nome completo"
 							required
 						/>
@@ -204,8 +169,8 @@ export function UserInfo({
 							type="email"
 							id="email"
 							name="email"
-							value={formData.email}
-							onChange={handleChange}
+							value={userFormData?.email}
+							onChange={handleInputChange}
 							placeholder="Insira o e-mail"
 							required
 						/>
@@ -214,8 +179,8 @@ export function UserInfo({
 							type="number"
 							id="ra"
 							name="ra"
-							value={formData.ra}
-							onChange={handleChange}
+							value={userFormData?.ra}
+							onChange={handleInputChange}
 							placeholder="Insira o RA"
 							required
 						/>
@@ -223,24 +188,24 @@ export function UserInfo({
 							<div>
 								<span className="text-zinc-300">Disciplinas</span>
 								<div className="flex flex-wrap gap-2 mt-2">
-									{disciplines.map((discipline) => (
-										<button
-											key={discipline.id}
-											type="button"
-											className={`border-2 rounded-md py-1 px-2 text-sm font-medium transition duration-200 ${
-												selectedDisciplines.some((d) => d.id === discipline.id)
-													? 'bg-sky-600 border-sky-400 text-white'
-													: 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
-											}`}
-											onClick={() => handleToggleDiscipline(discipline)}
-										>
-											{discipline.name}
-										</button>
-									))}
+									{disciplines &&
+										disciplines.map((discipline) => (
+											<button
+												key={discipline.id}
+												type="button"
+												className={`border-2 rounded-md py-1 px-2 text-sm font-medium transition duration-200 ${
+													userFormData?.disciplines?.includes(discipline.name)
+														? 'bg-sky-600 border-sky-400 text-white'
+														: 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+												}`}
+												onClick={() => handleToggleDiscipline(discipline)}
+											>
+												{discipline.name}
+											</button>
+										))}
 								</div>
 								<p className="mt-2 text-sm text-gray-400">
-									Selecionadas:{' '}
-									{selectedDisciplines.map((d) => d.name).join(', ')}
+									Selecionadas: {userFormData?.disciplines?.join(', ')}
 								</p>
 							</div>
 						)}
@@ -252,24 +217,25 @@ export function UserInfo({
 								<select
 									id="course"
 									name="course"
-									value={selectedCourse}
-									onChange={handleChange}
+									value={userFormData?.course}
+									onChange={handleInputChange}
 									className="bg-zinc-900 text-zinc-200 p-2 rounded-md w-full h-12 mt-2"
 								>
 									<option value="" disabled>
 										Selecione um curso
 									</option>
-									{courses.map((course) => (
-										<option key={course.id} value={course.name}>
-											{course.name}
-										</option>
-									))}
+									{courses &&
+										courses.map((course) => (
+											<option key={course.id} value={course.name}>
+												{course.name}
+											</option>
+										))}
 								</select>
 							</div>
 						)}
 					</div>
 					<div className="flex justify-end gap-4">
-						<Button type="button" variant="secondary" onClick={toggleEdit}>
+						<Button type="button" variant="secondary" onClick={handleCancel}>
 							Cancelar
 						</Button>
 						<Button type="button" onClick={handleSave}>
