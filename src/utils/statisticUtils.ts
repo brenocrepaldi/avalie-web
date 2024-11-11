@@ -1,4 +1,8 @@
-export const getFeedbackOption = () => {
+export const getFeedbackOption = (
+	positives: number,
+	neutral: number,
+	negatives: number
+) => {
 	return {
 		tooltip: {
 			trigger: 'item',
@@ -14,9 +18,21 @@ export const getFeedbackOption = () => {
 					borderRadius: 10,
 				},
 				data: [
-					{ value: 28, name: 'Positivas', itemStyle: { color: '#3b82f6' } },
-					{ value: 14, name: 'Neutras', itemStyle: { color: '#71717a' } },
-					{ value: 5, name: 'Negativas', itemStyle: { color: '#ef4444' } },
+					{
+						value: positives,
+						name: 'Positivas',
+						itemStyle: { color: '#3b82f6' },
+					},
+					{
+						value: neutral,
+						name: 'Neutras',
+						itemStyle: { color: '#71717a' },
+					},
+					{
+						value: negatives,
+						name: 'Negativas',
+						itemStyle: { color: '#ef4444' },
+					},
 				],
 				emphasis: {
 					itemStyle: {
