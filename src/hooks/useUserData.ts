@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useUserId } from './user-id';
-import { useUserAccessLevel } from './access-level';
+import { useUserId } from './useUserId';
+import { useUserAccessLevel } from './useUserAccessLevel';
 import { api } from '../services/api';
 import { toast } from 'sonner';
 

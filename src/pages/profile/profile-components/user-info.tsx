@@ -1,15 +1,15 @@
 import { Check, Pencil } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
-import { useUserAccessLevel } from '../../../hooks/access-level';
-import { UserData, useUserData } from '../../../hooks/useUserData';
+import { useCourses } from '../../../hooks/useCourses';
 import {
 	Discipline,
 	getDisciplineId,
 	useDisciplines,
 } from '../../../hooks/useDisciplines';
-import { useEffect, useState } from 'react';
-import { useCourses } from '../../../hooks/useCourses';
+import { useUserAccessLevel } from '../../../hooks/useUserAccessLevel';
+import { UserData, useUserData } from '../../../hooks/useUserData';
 import { NewUserData } from '../../../services/auth';
 
 interface UserInfoProps {

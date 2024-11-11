@@ -8,7 +8,7 @@ import homeLogo from '../../assets/home-logo.png';
 import { Button } from '../button';
 import { DatePickerModal } from './header-components/date-picker-modal';
 import { LogOutModal } from './header-components/log-out-modal';
-import { useUserAccessLevel } from '../../hooks/access-level';
+import { useUserAccessLevel } from '../../hooks/useUserAccessLevel';
 
 interface HeaderProps {
 	title: string;
