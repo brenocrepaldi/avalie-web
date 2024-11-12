@@ -91,7 +91,7 @@ export function Header({
 				)}
 				{userData && window.location.pathname === '/dashboard' && (
 					<div className="text-zinc-500 flex gap-2 items-baseline ml-[-150px]">
-						Olá, Professor
+						Olá, {userAccessLevel === 1 ? 'Professor' : 'Diretor'}
 						<span className="text-zinc-300 font-bold text-xl">
 							{userData.name}
 						</span>
