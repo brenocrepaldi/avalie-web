@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import { api } from '../services/api';
 import { getDisciplineId } from './useDisciplines';
+import { UserData } from './useUserData';
 
 // Função para buscar os dados do usuário
 async function fetchUserData(userId: string, userType: string) {
@@ -17,7 +18,7 @@ async function fetchUserData(userId: string, userType: string) {
 }
 
 // Tipo para avaliação
-type Rating = {
+export type Rating = {
 	id: string;
 	text: string;
 	course: string;
@@ -142,4 +143,39 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 
 	// Retornando as informações de todas as disciplinas
 	return disciplineRatings;
+}
+
+export async function getProfessorFeedbacks(professorId: string) {
+	const professorData: UserData = await fetchUserData(professorId, 'professor');
+	if (!professorData) return null;
+	const professorDisciplinesId = await getDisciplineId(professorData);
+
+	const professorFeedbacks: Rating[] = [];
+
+	await Promise.all(
+		professorDisciplinesId.map(async (disciplineId) => {
+			try {
+				const feedbacks: Rating[] = await api(
+					`/feedback/findByDiscipline?discipline=${disciplineId}`,
+					{ method: 'GET' }
+				);
+
+				if (feedbacks) {
+					feedbacks.map((feedback) => {
+						professorFeedbacks.push(feedback);
+					});
+				}
+			} catch (error) {
+				console.error('Error:', error);
+				toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+			}
+		})
+	);
+
+	// Ordena os feedbacks em ordem decrescente de data
+	professorFeedbacks.sort(
+		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+	);
+
+	return professorFeedbacks;
 }
