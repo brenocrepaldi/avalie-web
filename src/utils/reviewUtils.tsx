@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import { Rating } from '../hooks/useRatings';
 
 export function renderStars(
 	rating: number,
@@ -25,8 +26,8 @@ export function renderStars(
 	return stars;
 }
 
-export function getMeanRating(reviews: { rating: number }[]) {
-	if (reviews.length === 0) return 0;
-	const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
-	return sum / reviews.length;
+export function getMeanRating(feedbacks: Rating[]) {
+	if (feedbacks.length === 0) return 0;
+	const sum = feedbacks.reduce((acc, feedback) => acc + feedback.note, 0);
+	return sum / feedbacks.length;
 }

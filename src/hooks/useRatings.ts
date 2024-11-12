@@ -2,6 +2,35 @@ import { toast } from 'sonner';
 import { api } from '../services/api';
 import { getDisciplineId } from './useDisciplines';
 import { UserData } from './useUserData';
+import { useEffect, useState } from 'react';
+
+export type Rating = {
+	id: string;
+	text: string;
+	course: string;
+	student: string;
+	discipline: string;
+	note: number;
+	date: string;
+};
+
+export function useProfessorFeedbacks(professorId: string | null) {
+	const [professorFeedbacks, setProfessorFeedbacks] = useState<Rating[]>();
+
+	useEffect(() => {
+		async function fetchProfessorFeedbacks() {
+			if (professorId) {
+				const data = await getProfessorFeedbacks(professorId);
+				if (data) {
+					setProfessorFeedbacks(data);
+				}
+			}
+		}
+		fetchProfessorFeedbacks();
+	}, [professorId]);
+
+	return professorFeedbacks;
+}
 
 // Função para buscar os dados do usuário
 async function fetchUserData(userId: string, userType: string) {
@@ -16,17 +45,6 @@ async function fetchUserData(userId: string, userType: string) {
 		return null;
 	}
 }
-
-// Tipo para avaliação
-export type Rating = {
-	id: string;
-	text: string;
-	course: string;
-	student: string;
-	discipline: string;
-	note: number;
-	date: string;
-};
 
 // Função para calcular as avaliações (positivas, neutras, negativas e soma das notas)
 function calculateRatings(data: Rating[]) {

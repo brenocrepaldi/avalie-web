@@ -1,19 +1,29 @@
 import { useState } from 'react';
 import { PageLayout } from '../../components/page-layout';
 import { SlidersVertical } from 'lucide-react';
-import { reviews } from '../../utils/lastReviewsUtils';
 import { FilterPanel } from './reviews-components/filter-panel';
 import { ReviewSummary } from './reviews-components/review-summary';
 import { ReviewItem } from './reviews-components/review-item';
+import { useUserData } from '../../hooks/useUserData';
+import { useProfessorFeedbacks } from '../../hooks/useRatings';
 
 export function ReviewsPage() {
+	const userData = useUserData();
+	const professorFeedbacks = useProfessorFeedbacks(
+		userData ? userData.id : null
+	);
 	const [selectedRating, setSelectedRating] = useState<number | null>(null);
 	const [filterOpen, setFilterOpen] = useState(false);
 
+	if (!userData && !professorFeedbacks) return null;
+
 	const filteredReviews =
 		!filterOpen || selectedRating === null
-			? reviews
-			: reviews.filter((review) => review.rating === selectedRating);
+			? professorFeedbacks
+			: professorFeedbacks &&
+				professorFeedbacks.filter(
+					(feedback) => feedback.note === selectedRating
+				);
 
 	return (
 		<PageLayout title="Dashboard">
@@ -32,7 +42,12 @@ export function ReviewsPage() {
 								setSelectedRating={setSelectedRating}
 							/>
 						) : (
-							<ReviewSummary totalReviews={reviews.length} reviews={reviews} />
+							professorFeedbacks && (
+								<ReviewSummary
+									totalReviews={professorFeedbacks.length}
+									feedbacks={professorFeedbacks}
+								/>
+							)
 						)}
 						<button
 							onClick={() => {
@@ -49,12 +64,12 @@ export function ReviewsPage() {
 					</div>
 
 					<div className="min-h-40 flex flex-col gap-4 p-10 px-20 bg-zinc-900 rounded-lg items-center justify-center">
-						{filteredReviews.length > 0 ? (
+						{filteredReviews && filteredReviews.length > 0 ? (
 							filteredReviews.map((review, index) => (
 								<ReviewItem
 									key={index}
-									rating={review.rating}
-									comment={review.comment}
+									rating={review.note}
+									comment={review.course}
 									date={review.date}
 								/>
 							))

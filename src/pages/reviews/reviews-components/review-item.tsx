@@ -12,7 +12,13 @@ export function ReviewItem({ rating, comment, date }: ReviewItemProps) {
 			<div className="flex items-center">{renderStars(rating)}</div>
 			<div className="flex flex-col gap-1">
 				<span className="text-zinc-100 italic">{comment}</span>
-				<span className="text-zinc-500 text-sm">{date}</span>
+				<span className="text-zinc-500 text-sm">
+					{new Date(date).toLocaleDateString('pt-BR')} às{' '}
+					{new Date(date).toLocaleTimeString('pt-BR', {
+						hour: '2-digit',
+						minute: '2-digit',
+					})}
+				</span>
 			</div>
 		</div>
 	);
