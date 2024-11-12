@@ -1,26 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/button';
 import { renderStars } from '../../../utils/reviewUtils';
-import { getProfessorFeedbacks, Rating } from '../../../hooks/useRatings';
+import { useProfessorFeedbacks } from '../../../hooks/useRatings';
 import { useUserData } from '../../../hooks/useUserData';
-import { useEffect, useState } from 'react';
 
 export function LastReviews() {
 	const navigate = useNavigate();
 	const userData = useUserData();
-	const [professorFeedbacks, setProfessorFeedbacks] = useState<Rating[]>();
-
-	useEffect(() => {
-		async function fetchProfessorFeedbacks() {
-			if (userData) {
-				const data = await getProfessorFeedbacks(userData.id);
-				if (data) {
-					setProfessorFeedbacks(data);
-				}
-			}
-		}
-		fetchProfessorFeedbacks();
-	}, [userData]);
+	const professorFeedbacks = useProfessorFeedbacks(
+		userData ? userData.id : null
+	);
 
 	return (
 		<div className="bg-zinc-800 p-6 pb-8 rounded-lg shadow-shape text-zinc-300 flex-grow">
