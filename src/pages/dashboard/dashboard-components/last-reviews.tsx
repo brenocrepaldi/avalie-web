@@ -10,11 +10,6 @@ export function LastReviews() {
 	const userData = useUserData();
 	const [professorFeedbacks, setProfessorFeedbacks] = useState<Rating[]>();
 
-	if (userData) {
-		const professorFeedbacks = getProfessorFeedbacks(userData?.id);
-		console.log(professorFeedbacks);
-	}
-
 	useEffect(() => {
 		async function fetchProfessorFeedbacks() {
 			if (userData) {
