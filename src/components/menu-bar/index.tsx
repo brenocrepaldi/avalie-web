@@ -50,7 +50,7 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 				/> */}
 				{userAccessLevel === 2 && (
 					<MenuLink
-						link="/teachers"
+						link="/professors"
 						text="Professores"
 						icon={<Users />}
 						isMenubarOpen={isMenubarOpen}

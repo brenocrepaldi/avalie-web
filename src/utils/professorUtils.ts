@@ -4,7 +4,7 @@ export interface RatingProps {
 	comentario: string;
 }
 
-export interface TeacherDataProps {
+export interface ProfessorDataProps {
 	id: number;
 	nome: string;
 	disciplina: string;
@@ -13,7 +13,7 @@ export interface TeacherDataProps {
 	avaliacoes: RatingProps[];
 }
 
-export const teachersData = [
+export const professorsData = [
 	{
 		id: 1,
 		nome: 'Carlos Pereira',

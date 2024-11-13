@@ -36,7 +36,7 @@ export function LoginPage() {
 				);
 				data.access_level === 1
 					? navigate('/dashboard')
-					: navigate('/teachers');
+					: navigate('/professors');
 			}
 		});
 	}

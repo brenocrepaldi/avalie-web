@@ -57,8 +57,8 @@ export function Header({
 	function goBack() {
 		const pathName = window.location.pathname;
 
-		if (pathName === '/dashboard' || pathName === '/teachers') {
-			userAccessLevel === 1 ? navigate('/dashboard') : navigate('/teachers');
+		if (pathName === '/dashboard' || pathName === '/professors') {
+			userAccessLevel === 1 ? navigate('/dashboard') : navigate('/professors');
 		} else {
 			navigate(-1);
 		}
@@ -91,7 +91,7 @@ export function Header({
 				)}
 				{userData &&
 					(window.location.pathname === '/dashboard' ||
-						window.location.pathname === '/teachers') && (
+						window.location.pathname === '/professors') && (
 						<div className="text-zinc-500 flex gap-2 items-baseline ml-[-150px]">
 							Olá, {userAccessLevel === 1 ? 'Professor' : 'Diretor'}
 							<span className="text-zinc-300 font-bold text-xl">

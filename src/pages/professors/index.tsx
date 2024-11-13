@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/button';
 import { Input } from '../../components/input';
 import { PageLayout } from '../../components/page-layout';
-import { TeacherList } from './teachers-components/teacher-list';
-import { teachersData } from '../../utils/teachersUtils'; // alterar para dados do backend futuramente
+import { ProfessorList } from './professor-components/professor-list';
+import { professorsData as professorsData } from '../../utils/professorUtils'; // alterar para dados do backend futuramente
 
-export type ExpandedTeachersState = {
+export type ExpandedProfessorsState = {
 	[key: number]: boolean;
 };
 
@@ -15,16 +15,16 @@ export type VisibleFeedbacksState = {
 	[key: number]: number;
 };
 
-export function TeachersPage() {
+export function ProfessorsPage() {
 	const navigate = useNavigate();
-	const [expandedTeachers, setExpandedTeachers] =
-		useState<ExpandedTeachersState>({});
+	const [expandedProfessors, setExpandedProfessors] =
+		useState<ExpandedProfessorsState>({});
 	const [visibleFeedbacks, setVisibleFeedbacks] =
 		useState<VisibleFeedbacksState>({});
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const toggleExpand = (id: number) => {
-		setExpandedTeachers((prevState) => {
+		setExpandedProfessors((prevState) => {
 			const isExpanding = !prevState[id];
 			const newExpandedState = {
 				...prevState,
@@ -65,22 +65,22 @@ export function TeachersPage() {
 		setSearchTerm(e.target.value);
 	};
 
-	const handleShowMoreFeedbacks = (teacherId: number) => {
+	const handleShowMoreFeedbacks = (professorId: number) => {
 		setVisibleFeedbacks((prevState) => ({
 			...prevState,
-			[teacherId]: (prevState[teacherId] || 3) + 3,
+			[professorId]: (prevState[professorId] || 3) + 3,
 		}));
 	};
 
-	const filteredTeachers = teachersData.filter((teacher) =>
-		teacher.nome.toLowerCase().includes(searchTerm.toLowerCase())
+	const filteredProfessors = professorsData.filter((professor) =>
+		professor.nome.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
 	return (
 		<PageLayout title="Professores">
 			<div className="bg-zinc-800 p-6 pb-8 rounded-lg shadow-shape text-zinc-300 flex-grow space-y-8">
 				<div className="flex justify-between">
-					<Button onClick={() => navigate('/teachers/add-teacher')}>
+					<Button onClick={() => navigate('/professors/add-professor')}>
 						<PlusIcon />
 						Adicionar Professor
 					</Button>
@@ -97,9 +97,9 @@ export function TeachersPage() {
 
 				<div className="h-[1px] rounded-lg bg-zinc-700" />
 
-				<TeacherList
-					filteredTeachers={filteredTeachers}
-					expandedTeachers={expandedTeachers}
+				<ProfessorList
+					filteredProfessors={filteredProfessors}
+					expandedProfessors={expandedProfessors}
 					toggleExpand={toggleExpand}
 					renderStars={renderStars}
 					visibleFeedbacks={visibleFeedbacks}

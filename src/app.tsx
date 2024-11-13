@@ -4,13 +4,13 @@ import {
 	BrowserRouter as Router,
 	Routes,
 } from 'react-router-dom';
-import { AddTeacherPage } from './pages/add-teacher';
+import { AddProfessorPage } from './pages/add-professor';
 import { DashboardPage } from './pages/dashboard/index';
 import { LoginPage } from './pages/login/index';
 import { NotFoundPage } from './pages/not-found';
 import { ProfilePage } from './pages/profile';
 import { FeedbacksPage } from './pages/feedbacks';
-import { TeachersPage } from './pages/teachers';
+import { ProfessorsPage } from './pages/professors';
 import { PrivateRoute } from './routes/private-route';
 
 export function App() {
@@ -38,18 +38,18 @@ export function App() {
 				/>
 
 				<Route
-					path="/teachers"
+					path="/professors"
 					element={
 						<PrivateRoute requiredLevel={2}>
-							<TeachersPage />
+							<ProfessorsPage />
 						</PrivateRoute>
 					}
 				/>
 				<Route
-					path="/teachers/add-teacher"
+					path="/professors/add-professor"
 					element={
 						<PrivateRoute requiredLevel={2}>
-							<AddTeacherPage />
+							<AddProfessorPage />
 						</PrivateRoute>
 					}
 				/>

@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
 
-export function TeacherForm() {
+export function ProfessorForm() {
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -25,14 +25,14 @@ export function TeacherForm() {
 
 	const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
-	const registerTeacher = (e: React.FormEvent<HTMLFormElement>) => {
+	const registerProfessor = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		console.log(formData);
 		toast.success(`Professor cadastrado com sucesso!`);
 	};
 
 	return (
-		<form onSubmit={registerTeacher} className="space-y-6">
+		<form onSubmit={registerProfessor} className="space-y-6">
 			<div className="space-y-4">
 				<Input
 					label="Nome completo"
