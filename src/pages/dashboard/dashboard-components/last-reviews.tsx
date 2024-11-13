@@ -27,7 +27,7 @@ export function LastReviews() {
 									{renderStars(feedback.note)}
 								</span>
 								<span className="text-zinc-300 italic">
-									"{feedback.course}"
+									"{feedback.text}"
 								</span>
 								<span className="text-zinc-400 text-sm ml-auto">
 									{new Date(feedback.date).toLocaleDateString('pt-BR')} às{' '}

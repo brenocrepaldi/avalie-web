@@ -69,7 +69,7 @@ export function ReviewsPage() {
 								<ReviewItem
 									key={index}
 									rating={review.note}
-									comment={review.course}
+									comment={review.text}
 									date={review.date}
 								/>
 							))

@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { getDisciplineId } from './useDisciplines';
+import { Discipline, getDisciplineId } from './useDisciplines';
 import { UserData } from './useUserData';
 import { useEffect, useState } from 'react';
 
@@ -69,43 +69,12 @@ function calculateRatings(data: Rating[]) {
 
 // Função para obter as informações do professor (média e total de avaliações)
 export async function getProfessorRatingInfo(professorId: string) {
-	const professorData = await fetchUserData(professorId, 'professor');
-	if (!professorData) return null;
-	const professorDisciplinesId = await getDisciplineId(professorData);
+	const professorFeedbacks = await getProfessorFeedbacks(professorId);
 
-	let totalRatings = 0;
-	let sumOfRatings = 0;
-	let positiveRatings = 0;
-	let neutralRatings = 0;
-	let negativeRatings = 0;
+	const totalRatings = professorFeedbacks.length;
 
-	await Promise.all(
-		professorDisciplinesId.map(async (disciplineId) => {
-			try {
-				const data: Rating[] = await api(
-					`/feedback/findByDiscipline?discipline=${disciplineId}`,
-					{ method: 'GET' }
-				);
-
-				if (data) {
-					totalRatings += data.length;
-					const {
-						positiveRatings: positive,
-						neutralRatings: neutral,
-						negativeRatings: negative,
-						sumOfRatings: sum,
-					} = calculateRatings(data);
-					positiveRatings += positive;
-					neutralRatings += neutral;
-					negativeRatings += negative;
-					sumOfRatings += sum;
-				}
-			} catch (error) {
-				console.error('Error:', error);
-				toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
-			}
-		})
-	);
+	const { positiveRatings, neutralRatings, negativeRatings, sumOfRatings } =
+		calculateRatings(professorFeedbacks);
 
 	const meanRating = totalRatings > 0 ? sumOfRatings / totalRatings : 0;
 
@@ -133,10 +102,10 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 
 	const disciplineRatings: DisciplineRating[] = [];
 	await Promise.all(
-		professorDisciplinesId.map(async (disciplineId, index: number) => {
+		professorDisciplinesId.map(async (disciplineId) => {
 			try {
 				const data: Rating[] = await api(
-					`/feedback/findByDiscipline?discipline=${disciplineId}`,
+					`/feedback/findByDiscipline?disciplineId=${disciplineId}`,
 					{ method: 'GET' }
 				);
 
@@ -144,7 +113,12 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 					const { positiveRatings, neutralRatings, negativeRatings } =
 						calculateRatings(data);
 
-					const disciplineName = professorData.disciplines[index];
+					const disciplineData: Discipline = await api(
+						`/disciplines/findById?id=${disciplineId}`,
+						{ method: 'GET' }
+					);
+
+					const disciplineName = disciplineData.name;
 					disciplineRatings.push({
 						disciplineName,
 						positiveRatings,
@@ -165,7 +139,7 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 
 export async function getProfessorFeedbacks(professorId: string) {
 	const professorData: UserData = await fetchUserData(professorId, 'professor');
-	if (!professorData) return null;
+	if (!professorData) return [];
 	const professorDisciplinesId = await getDisciplineId(professorData);
 
 	const professorFeedbacks: Rating[] = [];
@@ -174,7 +148,7 @@ export async function getProfessorFeedbacks(professorId: string) {
 		professorDisciplinesId.map(async (disciplineId) => {
 			try {
 				const feedbacks: Rating[] = await api(
-					`/feedback/findByDiscipline?discipline=${disciplineId}`,
+					`/feedback/findByDiscipline?disciplineId=${disciplineId}`,
 					{ method: 'GET' }
 				);
 
@@ -194,6 +168,8 @@ export async function getProfessorFeedbacks(professorId: string) {
 	professorFeedbacks.sort(
 		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 	);
+
+	if (!professorFeedbacks) return [];
 
 	return professorFeedbacks;
 }
