@@ -1,11 +1,11 @@
 import { Star } from 'lucide-react';
-import { Rating } from '../hooks/useRatings';
+import { Feedback } from '../hooks/useFeedbacks';
 
 export function renderStars(
-	rating: number,
+	note: number,
 	clickable = false,
-	selectedRating: number | null = null,
-	onClick?: (rating: number) => void
+	selectedNote: number | null = null,
+	onClick?: (note: number) => void
 ) {
 	const maxStars = 5;
 	const stars = [];
@@ -15,7 +15,7 @@ export function renderStars(
 			<Star
 				key={i}
 				className={`h-6 w-6 transition-colors ${
-					i <= (clickable ? selectedRating || 0 : rating)
+					i <= (clickable ? selectedNote || 0 : note)
 						? 'text-yellow-400'
 						: 'text-gray-500'
 				} ${clickable && 'cursor-pointer'}`}
@@ -26,7 +26,7 @@ export function renderStars(
 	return stars;
 }
 
-export function getMeanRating(feedbacks: Rating[]) {
+export function getMeanNote(feedbacks: Feedback[]) {
 	if (feedbacks.length === 0) return 0;
 	const sum = feedbacks.reduce((acc, feedback) => acc + feedback.note, 0);
 	return sum / feedbacks.length;

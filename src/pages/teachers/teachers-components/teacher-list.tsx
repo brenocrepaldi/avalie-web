@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../../../components/button';
-import { ExpandedTeachersState, VisibleReviewsState } from '../index';
+import { ExpandedTeachersState, VisibleFeedbacksState } from '../index';
 import { TeacherDataProps } from '../../../utils/teachersUtils';
 import { api } from '../../../services/api';
 
@@ -9,9 +9,9 @@ interface TeacherListProps {
 	filteredTeachers: TeacherDataProps[];
 	expandedTeachers: ExpandedTeachersState;
 	toggleExpand: (id: number) => void;
-	renderStars: (rating: number) => ReactNode[];
-	visibleReviews: VisibleReviewsState;
-	handleShowMoreReviews: (teacherId: number) => void;
+	renderStars: (note: number) => ReactNode[];
+	visibleFeedbacks: VisibleFeedbacksState;
+	handleShowMoreFeedbacks: (teacherId: number) => void;
 }
 
 interface Teacher {
@@ -30,8 +30,8 @@ export function TeacherList({
 	expandedTeachers,
 	toggleExpand,
 	renderStars,
-	visibleReviews,
-	handleShowMoreReviews,
+	visibleFeedbacks,
+	handleShowMoreFeedbacks,
 }: TeacherListProps) {
 	const [teacherList, setTeacherList] = useState<TeacherList | null>(null);
 
@@ -114,7 +114,7 @@ export function TeacherList({
 										</h3>
 										<ul className="space-y-3">
 											{teacher.avaliacoes
-												.slice(0, visibleReviews[teacher.id] || 3)
+												.slice(0, visibleFeedbacks[teacher.id] || 3)
 												.map((avaliacao, index) => (
 													<li key={index} className="flex rounded-lg">
 														<div className="w-full px-4 py-4 bg-zinc-700 rounded-xl shadow-shape flex items-center gap-3">
@@ -131,10 +131,10 @@ export function TeacherList({
 													</li>
 												))}
 										</ul>
-										{(visibleReviews[teacher.id] || 3) <
+										{(visibleFeedbacks[teacher.id] || 3) <
 											teacher.avaliacoes.length && (
 											<Button
-												onClick={() => handleShowMoreReviews(teacher.id)}
+												onClick={() => handleShowMoreFeedbacks(teacher.id)}
 												className="text-zinc-400 hover:text-zinc-200 underline mt-2"
 												variant="secondary"
 												size="full"

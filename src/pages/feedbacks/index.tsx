@@ -1,29 +1,27 @@
 import { useState } from 'react';
 import { PageLayout } from '../../components/page-layout';
 import { SlidersVertical } from 'lucide-react';
-import { FilterPanel } from './reviews-components/filter-panel';
-import { ReviewSummary } from './reviews-components/review-summary';
-import { ReviewItem } from './reviews-components/review-item';
+import { FilterPanel } from './feedback-components/filter-panel';
+import { FeedbackSummary } from './feedback-components/feedback-summary';
+import { FeedbackItem } from './feedback-components/feedback-item';
 import { useUserData } from '../../hooks/useUserData';
-import { useProfessorFeedbacks } from '../../hooks/useRatings';
+import { useProfessorFeedbacks } from '../../hooks/useFeedbacks';
 
-export function ReviewsPage() {
+export function FeedbacksPage() {
 	const userData = useUserData();
 	const professorFeedbacks = useProfessorFeedbacks(
 		userData ? userData.id : null
 	);
-	const [selectedRating, setSelectedRating] = useState<number | null>(null);
+	const [selectedNote, setSelectedNote] = useState<number | null>(null);
 	const [filterOpen, setFilterOpen] = useState(false);
 
 	if (!userData && !professorFeedbacks) return null;
 
-	const filteredReviews =
-		!filterOpen || selectedRating === null
+	const filteredFeedbacks =
+		!filterOpen || selectedNote === null
 			? professorFeedbacks
 			: professorFeedbacks &&
-				professorFeedbacks.filter(
-					(feedback) => feedback.note === selectedRating
-				);
+				professorFeedbacks.filter((feedback) => feedback.note === selectedNote);
 
 	return (
 		<PageLayout title="Dashboard">
@@ -38,13 +36,13 @@ export function ReviewsPage() {
 					<div className="w-full flex items-center justify-center gap-2">
 						{filterOpen ? (
 							<FilterPanel
-								selectedRating={selectedRating}
-								setSelectedRating={setSelectedRating}
+								selectedNote={selectedNote}
+								setSelectedNote={setSelectedNote}
 							/>
 						) : (
 							professorFeedbacks && (
-								<ReviewSummary
-									totalReviews={professorFeedbacks.length}
+								<FeedbackSummary
+									totalFeedbacks={professorFeedbacks.length}
 									feedbacks={professorFeedbacks}
 								/>
 							)
@@ -52,7 +50,7 @@ export function ReviewsPage() {
 						<button
 							onClick={() => {
 								setFilterOpen(!filterOpen);
-								setSelectedRating(null);
+								setSelectedNote(null);
 							}}
 							className={`h-[64px] w-[52px] flex items-center justify-center p-2 rounded-lg text-zinc-100 transition-colors ${
 								filterOpen && 'bg-zinc-700 hover:bg-zinc-600'
@@ -64,13 +62,13 @@ export function ReviewsPage() {
 					</div>
 
 					<div className="min-h-40 flex flex-col gap-4 p-10 px-20 bg-zinc-900 rounded-lg items-center justify-center">
-						{filteredReviews && filteredReviews.length > 0 ? (
-							filteredReviews.map((review, index) => (
-								<ReviewItem
+						{filteredFeedbacks && filteredFeedbacks.length > 0 ? (
+							filteredFeedbacks.map((feedback, index) => (
+								<FeedbackItem
 									key={index}
-									rating={review.note}
-									comment={review.text}
-									date={review.date}
+									note={feedback.note}
+									comment={feedback.text}
+									date={feedback.date}
 								/>
 							))
 						) : (

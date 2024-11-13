@@ -4,7 +4,7 @@ import { Discipline, getDisciplineId } from './useDisciplines';
 import { UserData } from './useUserData';
 import { useEffect, useState } from 'react';
 
-export type Rating = {
+export type Feedback = {
 	id: string;
 	text: string;
 	course: string;
@@ -15,7 +15,7 @@ export type Rating = {
 };
 
 export function useProfessorFeedbacks(professorId: string | null) {
-	const [professorFeedbacks, setProfessorFeedbacks] = useState<Rating[]>();
+	const [professorFeedbacks, setProfessorFeedbacks] = useState<Feedback[]>();
 
 	useEffect(() => {
 		async function fetchProfessorFeedbacks() {
@@ -47,71 +47,71 @@ async function fetchUserData(userId: string, userType: string) {
 }
 
 // Função para calcular as avaliações (positivas, neutras, negativas e soma das notas)
-function calculateRatings(data: Rating[]) {
-	let positiveRatings = 0;
-	let neutralRatings = 0;
-	let negativeRatings = 0;
-	let sumOfRatings = 0;
+function calculateNotes(data: Feedback[]) {
+	let positiveNotes = 0;
+	let neutralNotes = 0;
+	let negativeNotes = 0;
+	let sumOfNotes = 0;
 
 	data.forEach((feedback) => {
-		sumOfRatings += feedback.note;
+		sumOfNotes += feedback.note;
 		if (feedback.note > 3) {
-			positiveRatings++;
+			positiveNotes++;
 		} else if (feedback.note < 3) {
-			negativeRatings++;
+			negativeNotes++;
 		} else {
-			neutralRatings++;
+			neutralNotes++;
 		}
 	});
 
-	return { positiveRatings, neutralRatings, negativeRatings, sumOfRatings };
+	return { positiveNotes, neutralNotes, negativeNotes, sumOfNotes };
 }
 
 // Função para obter as informações do professor (média e total de avaliações)
-export async function getProfessorRatingInfo(professorId: string) {
+export async function getProfessorNoteInfo(professorId: string) {
 	const professorFeedbacks = await getProfessorFeedbacks(professorId);
 
-	const totalRatings = professorFeedbacks.length;
+	const totalNotes = professorFeedbacks.length;
 
-	const { positiveRatings, neutralRatings, negativeRatings, sumOfRatings } =
-		calculateRatings(professorFeedbacks);
+	const { positiveNotes, neutralNotes, negativeNotes, sumOfNotes } =
+		calculateNotes(professorFeedbacks);
 
-	const meanRating = totalRatings > 0 ? sumOfRatings / totalRatings : 0;
+	const meanNote = totalNotes > 0 ? sumOfNotes / totalNotes : 0;
 
 	return {
-		meanRating,
-		totalRatings,
-		positiveRatings,
-		neutralRatings,
-		negativeRatings,
+		meanNote,
+		totalNotes,
+		positiveNotes,
+		neutralNotes,
+		negativeNotes,
 	};
 }
 
-export type DisciplineRating = {
+export type DisciplineNote = {
 	disciplineName: string;
-	positiveRatings: number;
-	neutralRatings: number;
-	negativeRatings: number;
+	positiveNotes: number;
+	neutralNotes: number;
+	negativeNotes: number;
 };
 
 // Função para obter as informações de avaliações por disciplina do professor
-export async function getProfessorDisciplineRatingInfo(professorId: string) {
+export async function getProfessorDisciplineNoteInfo(professorId: string) {
 	const professorData = await fetchUserData(professorId, 'professor');
 	if (!professorData) return null;
 	const professorDisciplinesId = await getDisciplineId(professorData);
 
-	const disciplineRatings: DisciplineRating[] = [];
+	const disciplineNotes: DisciplineNote[] = [];
 	await Promise.all(
 		professorDisciplinesId.map(async (disciplineId) => {
 			try {
-				const data: Rating[] = await api(
+				const data: Feedback[] = await api(
 					`/feedback/findByDiscipline?disciplineId=${disciplineId}`,
 					{ method: 'GET' }
 				);
 
 				if (data && professorData) {
-					const { positiveRatings, neutralRatings, negativeRatings } =
-						calculateRatings(data);
+					const { positiveNotes, neutralNotes, negativeNotes } =
+						calculateNotes(data);
 
 					const disciplineData: Discipline = await api(
 						`/disciplines/findById?id=${disciplineId}`,
@@ -119,11 +119,11 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 					);
 
 					const disciplineName = disciplineData.name;
-					disciplineRatings.push({
+					disciplineNotes.push({
 						disciplineName,
-						positiveRatings,
-						neutralRatings,
-						negativeRatings,
+						positiveNotes,
+						neutralNotes,
+						negativeNotes,
 					});
 				}
 			} catch (error) {
@@ -134,7 +134,7 @@ export async function getProfessorDisciplineRatingInfo(professorId: string) {
 	);
 
 	// Retornando as informações de todas as disciplinas
-	return disciplineRatings;
+	return disciplineNotes;
 }
 
 export async function getProfessorFeedbacks(professorId: string) {
@@ -142,12 +142,12 @@ export async function getProfessorFeedbacks(professorId: string) {
 	if (!professorData) return [];
 	const professorDisciplinesId = await getDisciplineId(professorData);
 
-	const professorFeedbacks: Rating[] = [];
+	const professorFeedbacks: Feedback[] = [];
 
 	await Promise.all(
 		professorDisciplinesId.map(async (disciplineId) => {
 			try {
-				const feedbacks: Rating[] = await api(
+				const feedbacks: Feedback[] = await api(
 					`/feedback/findByDiscipline?disciplineId=${disciplineId}`,
 					{ method: 'GET' }
 				);

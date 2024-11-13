@@ -11,7 +11,7 @@ export type ExpandedTeachersState = {
 	[key: number]: boolean;
 };
 
-export type VisibleReviewsState = {
+export type VisibleFeedbacksState = {
 	[key: number]: number;
 };
 
@@ -19,7 +19,8 @@ export function TeachersPage() {
 	const navigate = useNavigate();
 	const [expandedTeachers, setExpandedTeachers] =
 		useState<ExpandedTeachersState>({});
-	const [visibleReviews, setVisibleReviews] = useState<VisibleReviewsState>({});
+	const [visibleFeedbacks, setVisibleFeedbacks] =
+		useState<VisibleFeedbacksState>({});
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const toggleExpand = (id: number) => {
@@ -31,8 +32,8 @@ export function TeachersPage() {
 			};
 
 			if (!isExpanding) {
-				setVisibleReviews((prevVisibleReviews) => ({
-					...prevVisibleReviews,
+				setVisibleFeedbacks((prevVisibleFeedbacks) => ({
+					...prevVisibleFeedbacks,
 					[id]: 3,
 				}));
 			}
@@ -41,17 +42,17 @@ export function TeachersPage() {
 		});
 	};
 
-	const renderStars = (rating: number) => {
+	const renderStars = (note: number) => {
 		const maxStars = 5;
 		const starElements = [];
-		const roundedRating = Math.round(rating);
+		const roundedNote = Math.round(note);
 
 		for (let i = 1; i <= maxStars; i++) {
 			starElements.push(
 				<Star
 					key={i}
 					className={`h-6 w-6 ${
-						i <= roundedRating ? 'text-yellow-400' : 'text-gray-400'
+						i <= roundedNote ? 'text-yellow-400' : 'text-gray-400'
 					}`}
 				/>
 			);
@@ -64,8 +65,8 @@ export function TeachersPage() {
 		setSearchTerm(e.target.value);
 	};
 
-	const handleShowMoreReviews = (teacherId: number) => {
-		setVisibleReviews((prevState) => ({
+	const handleShowMoreFeedbacks = (teacherId: number) => {
+		setVisibleFeedbacks((prevState) => ({
 			...prevState,
 			[teacherId]: (prevState[teacherId] || 3) + 3,
 		}));
@@ -101,8 +102,8 @@ export function TeachersPage() {
 					expandedTeachers={expandedTeachers}
 					toggleExpand={toggleExpand}
 					renderStars={renderStars}
-					visibleReviews={visibleReviews}
-					handleShowMoreReviews={handleShowMoreReviews}
+					visibleFeedbacks={visibleFeedbacks}
+					handleShowMoreFeedbacks={handleShowMoreFeedbacks}
 				/>
 			</div>
 		</PageLayout>

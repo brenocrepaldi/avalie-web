@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/button';
-import { renderStars } from '../../../utils/reviewUtils';
-import { useProfessorFeedbacks } from '../../../hooks/useRatings';
+import { renderStars } from '../../../utils/feedbackUtils';
+import { useProfessorFeedbacks } from '../../../hooks/useFeedbacks';
 import { useUserData } from '../../../hooks/useUserData';
 
-export function LastReviews() {
+export function LastFeedbacks() {
 	const navigate = useNavigate();
 	const userData = useUserData();
 	const professorFeedbacks = useProfessorFeedbacks(
@@ -26,9 +26,7 @@ export function LastReviews() {
 								<span className="text-zinc-100 flex">
 									{renderStars(feedback.note)}
 								</span>
-								<span className="text-zinc-300 italic">
-									"{feedback.text}"
-								</span>
+								<span className="text-zinc-300 italic">"{feedback.text}"</span>
 								<span className="text-zinc-400 text-sm ml-auto">
 									{new Date(feedback.date).toLocaleDateString('pt-BR')} às{' '}
 									{new Date(feedback.date).toLocaleTimeString('pt-BR', {
@@ -42,7 +40,7 @@ export function LastReviews() {
 					<Button
 						size="full"
 						onClick={() => {
-							navigate('/dashboard/reviews');
+							navigate('/dashboard/feedbacks');
 						}}
 					>
 						Ver todas as avaliações

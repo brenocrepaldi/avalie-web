@@ -1,4 +1,4 @@
-import { DisciplineRating } from '../hooks/useRatings';
+import { DisciplineNote } from '../hooks/useFeedbacks';
 
 export const getFeedbackOption = (
 	positives: number,
@@ -53,7 +53,7 @@ export const getFeedbackOption = (
 };
 
 export const getGradesOption = (
-	disciplineRatingsInfo: DisciplineRating[] | undefined
+	disciplineNotesInfo: DisciplineNote[] | undefined
 ) => {
 	return {
 		tooltip: {
@@ -73,7 +73,7 @@ export const getGradesOption = (
 		},
 		yAxis: {
 			type: 'category',
-			data: disciplineRatingsInfo?.map((item) => item.disciplineName),
+			data: disciplineNotesInfo?.map((item) => item.disciplineName),
 		},
 		series: [
 			{
@@ -90,7 +90,7 @@ export const getGradesOption = (
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.positiveRatings || 0), // Valor mínimo para exibir
+				data: disciplineNotesInfo?.map((item) => item.positiveNotes || 0), // Valor mínimo para exibir
 				itemStyle: {
 					color: '#3b82f6',
 					borderRadius: [0, 7, 7, 0],
@@ -110,7 +110,7 @@ export const getGradesOption = (
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.neutralRatings || 0),
+				data: disciplineNotesInfo?.map((item) => item.neutralNotes || 0),
 				itemStyle: {
 					color: '#71717a',
 					borderRadius: [7, 7, 7, 7],
@@ -130,7 +130,7 @@ export const getGradesOption = (
 				emphasis: {
 					focus: 'series',
 				},
-				data: disciplineRatingsInfo?.map((item) => item.negativeRatings || 0),
+				data: disciplineNotesInfo?.map((item) => item.negativeNotes || 0),
 				itemStyle: {
 					color: '#ef4444',
 					borderRadius: [7, 7, 7, 7],

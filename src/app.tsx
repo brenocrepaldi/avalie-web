@@ -9,7 +9,7 @@ import { DashboardPage } from './pages/dashboard/index';
 import { LoginPage } from './pages/login/index';
 import { NotFoundPage } from './pages/not-found';
 import { ProfilePage } from './pages/profile';
-import { ReviewsPage } from './pages/reviews';
+import { FeedbacksPage } from './pages/feedbacks';
 import { TeachersPage } from './pages/teachers';
 import { PrivateRoute } from './routes/private-route';
 
@@ -29,10 +29,10 @@ export function App() {
 					}
 				/>
 				<Route
-					path="/dashboard/reviews"
+					path="/dashboard/feedbacks"
 					element={
 						<PrivateRoute requiredLevel={1}>
-							<ReviewsPage />
+							<FeedbacksPage />
 						</PrivateRoute>
 					}
 				/>

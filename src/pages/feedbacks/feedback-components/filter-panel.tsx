@@ -1,13 +1,13 @@
-import { renderStars } from '../../../utils/reviewUtils';
+import { renderStars } from '../../../utils/feedbackUtils';
 
 interface FilterPanelProps {
-	selectedRating: number | null;
-	setSelectedRating: (rating: number | null) => void;
+	selectedNote: number | null;
+	setSelectedNote: (note: number | null) => void;
 }
 
 export function FilterPanel({
-	selectedRating,
-	setSelectedRating,
+	selectedNote,
+	setSelectedNote,
 }: FilterPanelProps) {
 	return (
 		<div className="h-16 flex-1 p-3 rounded-md bg-zinc-900 flex justify-center transition-all duration-100">
@@ -17,7 +17,7 @@ export function FilterPanel({
 						Filtrar por estrelas:
 					</span>
 					<div className="flex gap-1">
-						{renderStars(5, true, selectedRating, setSelectedRating)}
+						{renderStars(5, true, selectedNote, setSelectedNote)}
 					</div>
 				</div>
 				<span className="flex justify-center text-xs text-zinc-500">
@@ -25,5 +25,5 @@ export function FilterPanel({
 				</span>
 			</div>
 		</div>
-	); 
+	);
 }

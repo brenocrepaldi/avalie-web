@@ -1,12 +1,12 @@
 import ReactECharts from 'echarts-for-react';
 import { useEffect, useState } from 'react';
 import {
-	DisciplineRating,
-	getProfessorDisciplineRatingInfo,
-	getProfessorRatingInfo,
-} from '../../../hooks/useRatings';
+	DisciplineNote,
+	getProfessorDisciplineNoteInfo,
+	getProfessorNoteInfo,
+} from '../../../hooks/useFeedbacks';
 import { useUserData } from '../../../hooks/useUserData';
-import { renderStars } from '../../../utils/reviewUtils';
+import { renderStars } from '../../../utils/feedbackUtils';
 import {
 	getFeedbackOption,
 	getGradesOption,
@@ -14,41 +14,41 @@ import {
 
 export function Statistics() {
 	const userData = useUserData();
-	const [ratingCategories, setRatingCategories] = useState<{
+	const [noteCategories, setNoteCategories] = useState<{
 		positives: number;
 		neutral: number;
 		negatives: number;
 	}>();
-	const [totalRating, setTotalRatings] = useState<number>();
-	const [meanRating, setMeanRating] = useState<number>(0);
-	const [disciplineRatingsInfo, setDisciplineRatingsInfo] =
-		useState<DisciplineRating[]>();
+	const [totalNote, setTotalNotes] = useState<number>();
+	const [meanNote, setMeanNote] = useState<number>(0);
+	const [disciplineNotesInfo, setDisciplineNotesInfo] =
+		useState<DisciplineNote[]>();
 
 	useEffect(() => {
-		async function fetchMeanRating() {
+		async function fetchMeanNote() {
 			if (userData) {
-				const ratingInfo = await getProfessorRatingInfo(userData.id);
-				if (ratingInfo) {
-					setMeanRating(ratingInfo.meanRating);
-					setRatingCategories({
-						positives: ratingInfo.positiveRatings,
-						neutral: ratingInfo.neutralRatings,
-						negatives: ratingInfo.negativeRatings,
+				const noteInfo = await getProfessorNoteInfo(userData.id);
+				if (noteInfo) {
+					setMeanNote(noteInfo.meanNote);
+					setNoteCategories({
+						positives: noteInfo.positiveNotes,
+						neutral: noteInfo.neutralNotes,
+						negatives: noteInfo.negativeNotes,
 					});
-					setTotalRatings(ratingInfo.totalRatings);
+					setTotalNotes(noteInfo.totalNotes);
 				}
 			}
 		}
-		async function fetchDisciplinesRatings() {
+		async function fetchDisciplinesNotes() {
 			if (userData) {
-				const disciplineRatings = await getProfessorDisciplineRatingInfo(
+				const disciplineNotes = await getProfessorDisciplineNoteInfo(
 					userData.id
 				);
-				if (disciplineRatings) setDisciplineRatingsInfo(disciplineRatings);
+				if (disciplineNotes) setDisciplineNotesInfo(disciplineNotes);
 			}
 		}
-		fetchMeanRating();
-		fetchDisciplinesRatings();
+		fetchMeanNote();
+		fetchDisciplinesNotes();
 	}, [userData]);
 
 	return (
@@ -62,24 +62,22 @@ export function Statistics() {
 								<span className="text-lg font-semibold text-zinc-100">
 									Média:
 								</span>
-								<div className="flex items-center">
-									{renderStars(meanRating)}
-								</div>
+								<div className="flex items-center">{renderStars(meanNote)}</div>
 							</div>
 							<div className="border-zinc-600 flex gap-2 items-baseline">
 								<span className="text-lg font-semibold text-zinc-200">
 									Total de avaliações:
 								</span>
-								<span className="text-zinc-400 text-lg">{totalRating}</span>
+								<span className="text-zinc-400 text-lg">{totalNote}</span>
 							</div>
 						</div>
 						<div className="h-[1px] rounded-lg bg-zinc-600" />
-						{ratingCategories && (
+						{noteCategories && (
 							<ReactECharts
 								option={getFeedbackOption(
-									ratingCategories.positives,
-									ratingCategories.neutral,
-									ratingCategories.negatives
+									noteCategories.positives,
+									noteCategories.neutral,
+									noteCategories.negatives
 								)}
 							/>
 						)}
@@ -90,8 +88,8 @@ export function Statistics() {
 					<div className="text-center font-medium text-xl text-zinc-200 mb-4">
 						Avaliações por disciplina
 					</div>
-					{userData && disciplineRatingsInfo && (
-						<ReactECharts option={getGradesOption(disciplineRatingsInfo)} />
+					{userData && disciplineNotesInfo && (
+						<ReactECharts option={getGradesOption(disciplineNotesInfo)} />
 					)}
 				</div>
 			</div>
