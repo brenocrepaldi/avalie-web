@@ -29,9 +29,9 @@ export function App() {
 					}
 				/>
 				<Route
-					path="/dashboard/feedbacks"
+					path="/feedbacks"
 					element={
-						<PrivateRoute requiredLevel={1}>
+						<PrivateRoute>
 							<FeedbacksPage />
 						</PrivateRoute>
 					}

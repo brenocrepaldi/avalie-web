@@ -40,7 +40,7 @@ export function LastFeedbacks() {
 					<Button
 						size="full"
 						onClick={() => {
-							navigate('/dashboard/feedbacks');
+							navigate('/feedbacks');
 						}}
 					>
 						Ver todas as avaliações

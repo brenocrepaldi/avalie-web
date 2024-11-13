@@ -6,11 +6,15 @@ import { FeedbackSummary } from './feedback-components/feedback-summary';
 import { FeedbackItem } from './feedback-components/feedback-item';
 import { useUserData } from '../../hooks/useUserData';
 import { useProfessorFeedbacks } from '../../hooks/useFeedbacks';
+import { useLocation } from 'react-router-dom';
 
 export function FeedbacksPage() {
+	const location = useLocation();
+	const professorId = location.state?.professorId;
 	const userData = useUserData();
+
 	const professorFeedbacks = useProfessorFeedbacks(
-		userData ? userData.id : null
+		professorId ?? (userData ? userData.id : null)
 	);
 	const [selectedNote, setSelectedNote] = useState<number | null>(null);
 	const [filterOpen, setFilterOpen] = useState(false);

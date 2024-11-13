@@ -32,6 +32,13 @@ export function useProfessorFeedbacks(professorId: string | null) {
 	return professorFeedbacks;
 }
 
+export async function fetchProfessorFeedbacks(professorId: string) {
+	const professorFeedbacks: Feedback[] = await getProfessorFeedbacks(
+		professorId
+	);
+	return professorFeedbacks;
+}
+
 // Função para buscar os dados do usuário
 async function fetchUserData(userId: string, userType: string) {
 	try {
