@@ -12,6 +12,7 @@ import { ProfilePage } from './pages/profile';
 import { FeedbacksPage } from './pages/feedbacks';
 import { ProfessorsPage } from './pages/professors';
 import { PrivateRoute } from './routes/private-route';
+import { RequestFeedbackPage } from './pages/request-feedback';
 
 export function App() {
 	return (
@@ -28,6 +29,15 @@ export function App() {
 						</PrivateRoute>
 					}
 				/>
+				<Route
+					path="/feedback-request"
+					element={
+						<PrivateRoute requiredLevel={1}>
+							<RequestFeedbackPage />
+						</PrivateRoute>
+					}
+				/>
+
 				<Route
 					path="/feedbacks"
 					element={

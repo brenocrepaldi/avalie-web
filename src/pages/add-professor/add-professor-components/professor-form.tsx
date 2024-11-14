@@ -5,7 +5,7 @@ import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
 import {
 	Discipline,
-	getDisciplineId,
+	getDisciplineListId,
 	useDisciplines,
 } from '../../../hooks/useDisciplines';
 import { UserData } from '../../../hooks/useUserData';
@@ -40,7 +40,7 @@ export function ProfessorForm() {
 		e.preventDefault();
 		if (!newProfessorFormData) return;
 
-		const disciplinesId = await getDisciplineId(newProfessorFormData);
+		const disciplinesId = await getDisciplineListId(newProfessorFormData);
 		newProfessorFormData.disciplines = disciplinesId;
 
 		const newProfessorData = {

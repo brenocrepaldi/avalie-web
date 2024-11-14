@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
 import { api } from '../services/api';
-import { Discipline, getDisciplineId } from './useDisciplines';
+import { Discipline, getDisciplineListId } from './useDisciplines';
 import { UserData } from './useUserData';
 import { useEffect, useState } from 'react';
 
@@ -105,7 +105,7 @@ export type DisciplineNote = {
 export async function getProfessorDisciplineNoteInfo(professorId: string) {
 	const professorData = await fetchUserData(professorId, 'professor');
 	if (!professorData) return null;
-	const professorDisciplinesId = await getDisciplineId(professorData);
+	const professorDisciplinesId = await getDisciplineListId(professorData);
 
 	const disciplineNotes: DisciplineNote[] = [];
 	await Promise.all(
@@ -147,7 +147,7 @@ export async function getProfessorDisciplineNoteInfo(professorId: string) {
 export async function getProfessorFeedbacks(professorId: string) {
 	const professorData: UserData = await fetchUserData(professorId, 'professor');
 	if (!professorData) return [];
-	const professorDisciplinesId = await getDisciplineId(professorData);
+	const professorDisciplinesId = await getDisciplineListId(professorData);
 
 	const professorFeedbacks: Feedback[] = [];
 

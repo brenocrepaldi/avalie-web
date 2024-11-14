@@ -34,7 +34,7 @@ export function useDisciplines() {
 	return disciplines;
 }
 
-export async function getDisciplineId(userData: UserData | undefined) {
+export async function getDisciplineListId(userData: UserData | undefined) {
 	const disciplinesId: string[] = [];
 
 	if (!userData?.disciplines) return disciplinesId;
@@ -59,4 +59,18 @@ export async function getDisciplineId(userData: UserData | undefined) {
 	}
 
 	return disciplinesId;
+}
+
+export async function getDisciplineId(disciplineName: string | undefined) {
+	if (!disciplineName) return '';
+
+	try {
+		const data = await api(`/disciplines/findByName?name=${disciplineName}`, {
+			method: 'GET',
+		});
+		if (data) return data[0].id;
+	} catch (error) {
+		console.error('Error:', error);
+		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+	}
 }

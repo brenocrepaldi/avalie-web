@@ -4,6 +4,7 @@ import {
 	LayoutDashboard,
 	Menu,
 	Users,
+	StarIcon,
 } from 'lucide-react';
 import { useUserAccessLevel } from '../../hooks/useUserAccessLevel';
 import { MenuLink } from './menu-link';
@@ -42,12 +43,22 @@ export function MenuBar({ toggleMenubar, isMenubarOpen }: MenuBarProps) {
 					/>
 				)}
 
+				{userAccessLevel === 1 && (
+					<MenuLink
+						link="/feedback-request"
+						text="Solicitar Avaliação"
+						icon={<StarIcon />}
+						isMenubarOpen={isMenubarOpen}
+					/>
+				)}
+
 				{/* <MenuLink
 					link="/report"
 					text="Relatório"
 					icon={<FileText />}
 					isMenubarOpen={isMenubarOpen}
 				/> */}
+
 				{userAccessLevel === 2 && (
 					<MenuLink
 						link="/professors"

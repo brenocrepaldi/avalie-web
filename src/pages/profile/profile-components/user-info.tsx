@@ -5,7 +5,7 @@ import { Input } from '../../../components/input';
 import { getCourseId, useCourses } from '../../../hooks/useCourses';
 import {
 	Discipline,
-	getDisciplineId,
+	getDisciplineListId,
 	useDisciplines,
 } from '../../../hooks/useDisciplines';
 import { useUserAccessLevel } from '../../../hooks/useUserAccessLevel';
@@ -69,7 +69,7 @@ export function UserInfo({
 		if (!userFormData) return;
 
 		if (userAccessLevel === 1) {
-			const disciplinesId = await getDisciplineId(userFormData);
+			const disciplinesId = await getDisciplineListId(userFormData);
 			userFormData.disciplines = disciplinesId;
 		} else {
 			const courseId = await getCourseId(userFormData);
