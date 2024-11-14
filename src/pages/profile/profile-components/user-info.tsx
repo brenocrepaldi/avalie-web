@@ -2,7 +2,7 @@ import { Check, Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
-import { useCourses } from '../../../hooks/useCourses';
+import { getCourseId, useCourses } from '../../../hooks/useCourses';
 import {
 	Discipline,
 	getDisciplineId,
@@ -71,6 +71,9 @@ export function UserInfo({
 		if (userAccessLevel === 1) {
 			const disciplinesId = await getDisciplineId(userFormData);
 			userFormData.disciplines = disciplinesId;
+		} else {
+			const courseId = await getCourseId(userFormData);
+			userFormData.course = courseId;
 		}
 
 		const newUserData =
