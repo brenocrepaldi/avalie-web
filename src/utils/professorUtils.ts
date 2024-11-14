@@ -1,85 +1,31 @@
-export interface RatingProps {
-	data: string;
-	nota: number;
-	comentario: string;
-}
+import { toast } from 'sonner';
+import { api } from '../services/api';
+import { handleErrorResponse } from '../services/error';
 
-export interface ProfessorDataProps {
-	id: number;
-	nome: string;
-	disciplina: string;
-	turmas: string[];
-	mediaAvaliacao: number;
-	avaliacoes: RatingProps[];
-}
+export type NewProfessor = {
+	ra: string;
+	name: string;
+	email: string;
+	password: string;
+	disciplines: string[];
+	active: boolean;
+};
 
-export const professorsData = [
-	{
-		id: 1,
-		nome: 'Carlos Pereira',
-		disciplina: 'Engenharia de Requisitos',
-		turmas: ['0301', '0302'],
-		mediaAvaliacao: 4.1,
-		avaliacoes: [
-			{
-				data: '05/10/2024',
-				nota: 4.25,
-				comentario: 'Muito claro nas explicações.',
+export async function addNewProfessor(professorData: NewProfessor) {
+	try {
+		const response = await api('/professor/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
 			},
-			{
-				data: '10/10/2024',
-				nota: 3.95,
-				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
-			},
-			{
-				data: '05/10/2024',
-				nota: 4.25,
-				comentario: 'Muito claro nas explicações.',
-			},
-			{
-				data: '10/10/2024',
-				nota: 3.95,
-				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
-			},
-			{
-				data: '05/10/2024',
-				nota: 4.25,
-				comentario: 'Muito claro nas explicações.',
-			},
-			{
-				data: '10/10/2024',
-				nota: 3.95,
-				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
-			},
-			{
-				data: '05/10/2024',
-				nota: 4.25,
-				comentario: 'Muito claro nas explicações.',
-			},
-			{
-				data: '10/10/2024',
-				nota: 3.95,
-				comentario: 'Bom professor, mas poderia dar mais exemplos práticos.',
-			},
-		],
-	},
-	{
-		id: 2,
-		nome: 'Luciana Andrade',
-		disciplina: 'Algoritmos Avançados',
-		turmas: ['0201'],
-		mediaAvaliacao: 2.35,
-		avaliacoes: [
-			{
-				data: '08/10/2024',
-				nota: 2.5,
-				comentario: 'Razoável, mas sempre disponível para tirar dúvidas.',
-			},
-			{
-				data: '13/10/2024',
-				nota: 2.25,
-				comentario: 'Aula ruim, sem exemplos práticos.',
-			},
-		],
-	},
-];
+			body: JSON.stringify(professorData),
+		});
+
+		if (response.ok) {
+			return true;
+		} else handleErrorResponse(response);
+	} catch (error) {
+		console.error('Error:', error);
+		toast.error('Erro ao conectar com o servidor. Verifique sua conexão.');
+	}
+}

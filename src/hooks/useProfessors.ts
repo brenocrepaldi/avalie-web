@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 
-export interface Professor {
+export type Professor = {
 	id: string;
 	name: string;
 	ra: string;
 	disciplines: string[];
 	email: string;
 	active: boolean;
-}
+};
 
 type ProfessorList = Professor[];
 

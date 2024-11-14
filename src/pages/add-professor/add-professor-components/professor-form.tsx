@@ -3,44 +3,95 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '../../../components/button';
 import { Input } from '../../../components/input';
+import {
+	Discipline,
+	getDisciplineId,
+	useDisciplines,
+} from '../../../hooks/useDisciplines';
+import { UserData } from '../../../hooks/useUserData';
+import { addNewProfessor } from '../../../utils/professorUtils';
 
 export function ProfessorForm() {
-	const [formData, setFormData] = useState({
-		name: '',
-		email: '',
-		password: '',
-		ra: '',
-		discipline: '',
-		active: false,
-	});
+	const [newProfessorFormData, setNewProfessorFormData] = useState<UserData>();
 	const [showPassword, setShowPassword] = useState(false);
+	const disciplines = useDisciplines();
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value, type, checked } = e.target;
-		setFormData((prevData) => ({
-			...prevData,
-			[name]: type === 'checkbox' ? checked : value,
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
+		const { name, value } = e.target;
+		setNewProfessorFormData((prevData) => ({
+			...(prevData as UserData),
+			[name]: value,
+		}));
+	};
+
+	const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, checked } = e.target;
+		setNewProfessorFormData((prevData) => ({
+			...(prevData as UserData),
+			[name]: checked,
 		}));
 	};
 
 	const handlePasswordVisibility = () => setShowPassword(!showPassword);
 
-	const registerProfessor = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(formData);
-		toast.success(`Professor cadastrado com sucesso!`);
+		if (!newProfessorFormData) return;
+
+		const disciplinesId = await getDisciplineId(newProfessorFormData);
+		newProfessorFormData.disciplines = disciplinesId;
+
+		const newProfessorData = {
+			name: newProfessorFormData.name,
+			password: newProfessorFormData.password,
+			email: newProfessorFormData.email,
+			ra: newProfessorFormData.ra,
+			disciplines: newProfessorFormData.disciplines,
+			active: newProfessorFormData.active,
+		};
+
+		const professorAdded = await addNewProfessor(newProfessorData);
+
+		if (professorAdded) toast.success(`Professor cadastrado com sucesso!`);
+		else toast.error(`Erro ao cadastrar o professor!`);
+	};
+
+	const handleToggleDiscipline = (discipline: Discipline) => {
+		setNewProfessorFormData((prevData) => {
+			const currentDisciplines = prevData?.disciplines || [];
+			const updatedDisciplines = currentDisciplines.includes(discipline.name)
+				? currentDisciplines.filter((d) => d !== discipline.name)
+				: [...currentDisciplines, discipline.name];
+
+			return {
+				...(prevData as UserData),
+				disciplines: updatedDisciplines,
+			};
+		});
 	};
 
 	return (
-		<form onSubmit={registerProfessor} className="space-y-6">
+		<form onSubmit={handleSubmit} className="space-y-6">
 			<div className="space-y-4">
+				<Input
+					label="RA"
+					type="number"
+					id="ra"
+					name="ra"
+					value={newProfessorFormData?.ra || ''}
+					onChange={handleInputChange}
+					placeholder="Insira o RA"
+					required
+				/>
 				<Input
 					label="Nome completo"
 					type="text"
 					id="name"
 					name="name"
-					value={formData.name}
-					onChange={handleChange}
+					value={newProfessorFormData?.name || ''}
+					onChange={handleInputChange}
 					placeholder="Insira o nome completo"
 					required
 				/>
@@ -49,8 +100,8 @@ export function ProfessorForm() {
 					type="email"
 					id="email"
 					name="email"
-					value={formData.email}
-					onChange={handleChange}
+					value={newProfessorFormData?.email || ''}
+					onChange={handleInputChange}
 					placeholder="Insira o e-mail"
 					required
 				/>
@@ -62,37 +113,40 @@ export function ProfessorForm() {
 					type={showPassword ? 'text' : 'password'}
 					name="password"
 					placeholder="Digite sua senha"
-					value={formData.password}
-					onChange={handleChange}
+					value={newProfessorFormData?.password || ''}
+					onChange={handleInputChange}
 					required
 				/>
-				<Input
-					label="RA"
-					type="number"
-					id="ra"
-					name="ra"
-					value={formData.ra}
-					onChange={handleChange}
-					placeholder="Insira o RA"
-					required
-				/>
-				<Input
-					label="Disciplina"
-					type="text"
-					id="discipline"
-					name="discipline"
-					value={formData.discipline}
-					onChange={handleChange}
-					placeholder="Insira a disciplina"
-					required
-				/>
+				<div>
+					<span className="text-zinc-300">Disciplinas</span>
+					<div className="flex flex-wrap gap-2 mt-2">
+						{disciplines &&
+							disciplines.map((discipline) => (
+								<button
+									key={discipline.id}
+									type="button"
+									className={`border-2 rounded-md py-1 px-2 text-sm font-medium transition duration-200 ${
+										newProfessorFormData?.disciplines?.includes(discipline.name)
+											? 'bg-sky-600 border-sky-400 text-white'
+											: 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+									}`}
+									onClick={() => handleToggleDiscipline(discipline)}
+								>
+									{discipline.name}
+								</button>
+							))}
+					</div>
+					<p className="mt-2 text-sm text-gray-400">
+						Selecionadas: {newProfessorFormData?.disciplines?.join(', ')}
+					</p>
+				</div>
 				<div className="flex items-center justify-start gap-2">
 					<input
 						type="checkbox"
 						id="active"
 						name="active"
-						checked={formData.active}
-						onChange={handleChange}
+						checked={newProfessorFormData?.active || false}
+						onChange={handleCheckboxChange}
 						className="w-4 h-4"
 					/>
 					<label htmlFor="active" className="text-zinc-200">

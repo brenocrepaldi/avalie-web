@@ -39,6 +39,7 @@ export function Input({
 				/>
 				{isPassword && (
 					<button
+						type="button"
 						onClick={(e) => {
 							handlePasswordVisibility?.(e);
 						}}
