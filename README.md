@@ -1,6 +1,6 @@
 <div align="center">
 
-# 📊 Avalie Web
+# 📊 Avali-e
 
 ### Sistema de Avaliação Acadêmica para Instituições de Ensino Superior
 
@@ -23,7 +23,7 @@
 
 ## 📋 Sobre o Projeto
 
-**Avalie Web** é uma plataforma desenvolvida como projeto acadêmico para gerenciamento de avaliações de desempenho docente em instituições de ensino superior. O sistema permite que alunos forneçam feedback sobre professores e disciplinas, enquanto gestores e docentes podem visualizar estatísticas, gráficos e relatórios detalhados.
+**Avali-e** é uma plataforma desenvolvida como projeto acadêmico para gerenciamento de avaliações de desempenho docente em instituições de ensino superior. O sistema permite que alunos forneçam feedback sobre professores e disciplinas, enquanto gestores e docentes podem visualizar estatísticas, gráficos e relatórios detalhados.
 
 ### 🎯 Objetivos
 
@@ -35,7 +35,7 @@
 
 ### 🎓 Contexto Acadêmico
 
-Este projeto foi desenvolvido como trabalho de conclusão de curso, aplicando conhecimentos de:
+Este projeto foi desenvolvido como trabalho de curso, aplicando conhecimentos de:
 - Desenvolvimento Frontend com React e TypeScript
 - Arquitetura de componentes reutilizáveis
 - Gerenciamento de estado e rotas
