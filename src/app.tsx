@@ -16,15 +16,57 @@ export function App() {
 				<Route path="/" element={<Navigate to="/login" />} />
 				<Route path="/login" element={<LoginPage />} />
 
-				<Route path="/dashboard" element={<DashboardPage />} />
-				<Route path="/feedback-request" element={<RequestFeedbackPage />} />
+				<Route
+					path="/dashboard"
+					element={
+						<PrivateRoute requiredLevel={1}>
+							<DashboardPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/feedback-request"
+					element={
+						<PrivateRoute requiredLevel={1}>
+							<RequestFeedbackPage />
+						</PrivateRoute>
+					}
+				/>
 
-				<Route path="/feedbacks" element={<FeedbacksPage />} />
+				<Route
+					path="/feedbacks"
+					element={
+						<PrivateRoute>
+							<FeedbacksPage />
+						</PrivateRoute>
+					}
+				/>
 
-				<Route path="/professors" element={<ProfessorsPage />} />
-				<Route path="/professors/add-professor" element={<AddProfessorPage />} />
+				<Route
+					path="/professors"
+					element={
+						<PrivateRoute requiredLevel={2}>
+							<ProfessorsPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/professors/add-professor"
+					element={
+						<PrivateRoute requiredLevel={2}>
+							<AddProfessorPage />
+						</PrivateRoute>
+					}
+				/>
 
-				<Route path="/profile" element={<ProfilePage />} />
+				<Route
+					path="/profile"
+					element={
+						<PrivateRoute>
+							<ProfilePage />
+						</PrivateRoute>
+					}
+				/>
 
 				<Route path="/not-found" element={<NotFoundPage />} />
 			</Routes>
